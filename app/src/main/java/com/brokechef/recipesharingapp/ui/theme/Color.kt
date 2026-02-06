@@ -1,4 +1,4 @@
-package com.example.recipesharingapp.ui.theme
+package com.brokechef.recipesharingapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

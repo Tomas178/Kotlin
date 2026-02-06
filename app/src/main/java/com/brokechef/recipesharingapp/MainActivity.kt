@@ -1,4 +1,4 @@
-package com.example.recipesharingapp
+package com.brokechef.recipesharingapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.recipesharingapp.ui.theme.MyApplicationTheme
+import com.brokechef.recipesharingapp.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

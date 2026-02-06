@@ -1,4 +1,4 @@
-package com.example.recipesharingapp.ui.theme
+package com.brokechef.recipesharingapp.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

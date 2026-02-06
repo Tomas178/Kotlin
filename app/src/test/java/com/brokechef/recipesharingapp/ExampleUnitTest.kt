@@ -1,4 +1,4 @@
-package com.example.recipesharingapp
+package com.brokechef.recipesharingapp
 
 import org.junit.Assert.*
 import org.junit.Test

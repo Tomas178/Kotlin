@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
-val bundleId = "com.example.recipesharingapp"
+val bundleId = "com.brokechef.recipesharingapp"
 
 android {
     namespace = bundleId
