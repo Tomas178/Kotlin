@@ -3,14 +3,16 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+val bundleId = "com.example.recipesharingapp"
+
 android {
-    namespace = "com.example.myapplication"
+    namespace = bundleId
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = bundleId
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -24,7 +26,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
