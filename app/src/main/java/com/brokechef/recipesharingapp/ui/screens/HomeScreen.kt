@@ -6,23 +6,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.ui.components.Pagination
 import com.brokechef.recipesharingapp.ui.components.RecipeCard
+import com.brokechef.recipesharingapp.ui.components.buttons.LoadMoreButton
 import com.brokechef.recipesharingapp.ui.viewModels.HomeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.HomeViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -35,7 +32,7 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             Text(
-                text = "Recipe Feed",
+                text = "BrokeChef",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(16.dp),
             )
@@ -47,11 +44,11 @@ fun HomeScreen(
             }
 
             is HomeUiState.Success -> {
-                RecipeListWithPagination(
+                RecipeList(
                     recipes = homeUiState.recipes,
-                    currentPage = viewModel.currentPage,
-                    totalPages = viewModel.totalPages,
-                    onPageChange = { page -> viewModel.fetchPage(page) },
+                    hasMore = viewModel.hasMore,
+                    isLoadingMore = viewModel.isLoadingMore,
+                    onLoadMore = { viewModel.loadMore() },
                     contentPadding = innerPadding,
                 )
             }
@@ -84,37 +81,29 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun RecipeListWithPagination(
+fun RecipeList(
     recipes: List<RecipesFindAll200ResponseInner>,
-    currentPage: Int,
-    totalPages: Int,
-    onPageChange: (Int) -> Unit,
+    hasMore: Boolean,
+    isLoadingMore: Boolean,
+    onLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        state = listState,
         contentPadding = contentPadding,
     ) {
         items(recipes) { recipe ->
             RecipeCard(recipe = recipe)
         }
 
-        item {
-            Pagination(
-                currentPage = currentPage,
-                totalPages = totalPages,
-                onPageChange = { page ->
-                    onPageChange(page)
-                    coroutineScope.launch {
-                        listState.animateScrollToItem(0)
-                    }
-                },
-            )
+        if (hasMore) {
+            item {
+                LoadMoreButton(
+                    onClick = onLoadMore,
+                    isLoading = isLoadingMore,
+                )
+            }
         }
     }
 }

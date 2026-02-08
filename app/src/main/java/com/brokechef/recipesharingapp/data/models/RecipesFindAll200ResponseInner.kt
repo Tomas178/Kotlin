@@ -51,7 +51,7 @@ data class RecipesFindAll200ResponseInner (
     val duration: kotlin.Int,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-07T11:12:00.674Z",
+    val createdAt: kotlin.String = "2026-02-08T15:38:13.047Z",
 
     @SerialName(value = "author")
     val author: RecipesFindAll200ResponseInnerAuthor,

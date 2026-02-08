@@ -44,4 +44,20 @@ class RecipesRepository {
             return emptyList()
         }
     }
+
+    suspend fun getTotalCount(): Int {
+        try {
+            val result = api.recipesTotalCount()
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return 0
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return 0
+        }
+    }
 }

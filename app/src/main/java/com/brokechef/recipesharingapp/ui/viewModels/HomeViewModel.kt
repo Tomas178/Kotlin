@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.repository.RecipesRepository
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 sealed interface HomeUiState {
     data class Success(
@@ -31,41 +30,47 @@ class HomeViewModel : ViewModel() {
     var homeUiState: HomeUiState by mutableStateOf(HomeUiState.Loading)
         private set
 
-    var currentPage: Int by mutableIntStateOf(1)
+    var isLoadingMore: Boolean by mutableStateOf(false)
         private set
 
-    var totalPages: Int by mutableIntStateOf(1)
+    var totalCount: Int by mutableIntStateOf(0)
         private set
+
+    private val allRecipes: MutableList<RecipesFindAll200ResponseInner> = mutableListOf()
+
+    val hasMore: Boolean
+        get() = allRecipes.size < totalCount
 
     init {
-        fetchPage(1)
+        viewModelScope.launch {
+            totalCount = repository.getTotalCount()
+            loadRecipes()
+        }
     }
 
-    fun fetchPage(page: Int) {
-        viewModelScope.launch {
-            homeUiState = HomeUiState.Loading
-            currentPage = page
-            val offset = (page - 1) * RECIPES_PER_PAGE
-
-            try {
-                val result =
-                    repository.getAllRecipes(
-                        offset = offset,
-                        limit = RECIPES_PER_PAGE,
-                    )
-                homeUiState = HomeUiState.Success(result)
-
-                if (result.size == RECIPES_PER_PAGE) {
-                    if (totalPages <= currentPage) {
-                        totalPages = currentPage + 1
-                    }
-                } else {
-                    totalPages = currentPage
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
+    private suspend fun loadRecipes() {
+        try {
+            val result =
+                repository.getAllRecipes(
+                    offset = allRecipes.size,
+                    limit = RECIPES_PER_PAGE,
+                )
+            allRecipes.addAll(result)
+            homeUiState = HomeUiState.Success(allRecipes.toList())
+        } catch (e: Exception) {
+            if (allRecipes.isEmpty()) {
                 homeUiState = HomeUiState.Error
             }
+        }
+    }
+
+    fun loadMore() {
+        if (isLoadingMore || !hasMore) return
+
+        viewModelScope.launch {
+            isLoadingMore = true
+            loadRecipes()
+            isLoadingMore = false
         }
     }
 }
