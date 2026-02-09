@@ -48,6 +48,9 @@ class AuthViewModel(
     var resetPasswordSent by mutableStateOf(false)
         private set
 
+    var signUpSuccess by mutableStateOf(false)
+        private set
+
     init {
         checkSession()
     }
@@ -76,11 +79,11 @@ class AuthViewModel(
     ) {
         viewModelScope.launch {
             errorMessage = null
+            signUpSuccess = false
             authService
                 .signUp(name, email, password)
                 .onSuccess {
-                    tokenManager.saveToken(it.token)
-                    authState = AuthState.Authenticated(it)
+                    signUpSuccess = true
                 }.onFailure { errorMessage = it.message }
         }
     }
@@ -118,6 +121,11 @@ class AuthViewModel(
                 .onSuccess { resetPasswordSent = true }
                 .onFailure { errorMessage = it.message }
         }
+    }
+
+    fun clearResetPasswordState() {
+        resetPasswordSent = false
+        errorMessage = null
     }
 
     fun getSocialLoginUrl(provider: String): String = authService.getSocialLoginUrl(provider)

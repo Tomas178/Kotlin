@@ -83,21 +83,17 @@ class AuthService(
         name: String,
         email: String,
         password: String,
-    ): Result<AuthResponse> =
+    ): Result<Unit> =
         try {
             val response =
                 client.post("$baseUrl/api/auth/sign-up/email") {
                     contentType(ContentType.Application.Json)
                     setBody(SignUpRequest(name, email, password))
                 }
-            val body = response.bodyAsText()
             if (response.status == HttpStatusCode.OK) {
-                try {
-                    Result.success(lenientJson.decodeFromString<AuthResponse>(body))
-                } catch (e: Exception) {
-                    Result.failure(Exception(parseError(body, "Sign up failed")))
-                }
+                Result.success(Unit)
             } else {
+                val body = response.bodyAsText()
                 Result.failure(Exception(parseError(body, "Sign up failed: ${response.status}")))
             }
         } catch (e: Exception) {

@@ -72,6 +72,7 @@ private fun AuthScreens(authViewModel: AuthViewModel) {
                 },
                 getSocialLoginUrl = { authViewModel.getSocialLoginUrl(it) },
                 errorMessage = authViewModel.errorMessage,
+                signUpSuccess = authViewModel.signUpSuccess,
             )
         }
         composable(Screen.RequestResetPassword.route) {
@@ -82,6 +83,7 @@ private fun AuthScreens(authViewModel: AuthViewModel) {
                 onNavigateToSignIn = {
                     navController.popBackStack()
                 },
+                onClearState = { authViewModel.clearResetPasswordState() },
                 errorMessage = authViewModel.errorMessage,
                 resetSent = authViewModel.resetPasswordSent,
             )
