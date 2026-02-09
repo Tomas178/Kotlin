@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.brokechef.recipesharingapp.ui.screens.HomeScreen
+import com.brokechef.recipesharingapp.ui.screens.MainScreen
 import com.brokechef.recipesharingapp.ui.theme.MyApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MyApplicationTheme {
-                HomeScreen()
+                MainScreen()
             }
         }
     }

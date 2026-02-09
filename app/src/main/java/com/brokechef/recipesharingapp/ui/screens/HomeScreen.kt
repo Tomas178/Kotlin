@@ -3,12 +3,9 @@ package com.brokechef.recipesharingapp.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,34 +25,23 @@ fun HomeScreen(
 ) {
     val homeUiState = viewModel.homeUiState
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            Text(
-                text = "BrokeChef",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(16.dp),
+    when (homeUiState) {
+        is HomeUiState.Loading -> {
+            LoadingScreen(modifier = modifier)
+        }
+
+        is HomeUiState.Success -> {
+            RecipeList(
+                recipes = homeUiState.recipes,
+                hasMore = viewModel.hasMore,
+                isLoadingMore = viewModel.isLoadingMore,
+                onLoadMore = { viewModel.loadMore() },
+                modifier = modifier,
             )
-        },
-    ) { innerPadding ->
-        when (homeUiState) {
-            is HomeUiState.Loading -> {
-                LoadingScreen(modifier = Modifier.padding(innerPadding))
-            }
+        }
 
-            is HomeUiState.Success -> {
-                RecipeList(
-                    recipes = homeUiState.recipes,
-                    hasMore = viewModel.hasMore,
-                    isLoadingMore = viewModel.isLoadingMore,
-                    onLoadMore = { viewModel.loadMore() },
-                    contentPadding = innerPadding,
-                )
-            }
-
-            is HomeUiState.Error -> {
-                ErrorScreen(modifier = Modifier.padding(innerPadding))
-            }
+        is HomeUiState.Error -> {
+            ErrorScreen(modifier = modifier)
         }
     }
 }
