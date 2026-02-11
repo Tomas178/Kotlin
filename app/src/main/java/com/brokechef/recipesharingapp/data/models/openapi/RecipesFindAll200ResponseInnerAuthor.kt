@@ -13,7 +13,7 @@
     "UnusedImport"
 )
 
-package com.brokechef.recipesharingapp.data.models
+package com.brokechef.recipesharingapp.data.models.openapi
 
 
 import kotlinx.serialization.Serializable
@@ -23,14 +23,18 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param message 
+ * @param name 
+ * @param image 
  */
 @Serializable
 
-data class RecipesFindAll400ResponseIssuesInner (
+data class RecipesFindAll200ResponseInnerAuthor (
 
-    @SerialName(value = "message")
-    val message: kotlin.String?
+    @SerialName(value = "name")
+    val name: kotlin.String,
+
+    @SerialName(value = "image")
+    val image: kotlin.String?
 
 ) {
 

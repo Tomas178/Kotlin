@@ -15,8 +15,9 @@
 
 package com.brokechef.recipesharingapp.api
 
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll400Response
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch400Response
 
 import org.openapitools.client.infrastructure.*
 import io.ktor.client.HttpClientConfig
@@ -61,6 +62,45 @@ import io.ktor.http.ParametersBuilder
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
             "/recipes/all",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /recipes/search
+        * Search recipes semantically
+        * 
+         * @param userInput  
+         * @param offset  (optional, default to 0)
+         * @param limit  (optional, default to 5)
+         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun recipesSearch(userInput: kotlin.String, offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
+            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+            userInput?.apply { localVariableQuery["userInput"] = listOf("$userInput") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/recipes/search",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

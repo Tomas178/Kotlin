@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.ui.theme.CardBackground
 import com.brokechef.recipesharingapp.ui.theme.HeaderDark
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder

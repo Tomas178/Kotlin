@@ -1,20 +1,23 @@
 package com.brokechef.recipesharingapp.ui.screens
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.ui.components.RecipeCard
-import com.brokechef.recipesharingapp.ui.components.buttons.LoadMoreButton
+import com.brokechef.recipesharingapp.ui.components.RecipesList
+import com.brokechef.recipesharingapp.ui.components.SearchBar
+import com.brokechef.recipesharingapp.ui.components.SortDropdownMenu
+import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
+import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
 import com.brokechef.recipesharingapp.ui.viewModels.HomeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.HomeViewModel
 
@@ -23,73 +26,60 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
 ) {
-    val homeUiState = viewModel.homeUiState
-
-    when (homeUiState) {
+    when (val homeUiState = viewModel.homeUiState) {
         is HomeUiState.Loading -> {
             LoadingScreen(modifier = modifier)
         }
 
         is HomeUiState.Success -> {
-            RecipeList(
-                recipes = homeUiState.recipes,
-                hasMore = viewModel.hasMore,
-                isLoadingMore = viewModel.isLoadingMore,
-                onLoadMore = { viewModel.loadMore() },
-                modifier = modifier,
-            )
+            Column(modifier = modifier.fillMaxSize()) {
+                SearchBar(
+                    query = viewModel.searchQuery,
+                    onQueryChange = { viewModel.updateSearchQuery(it) },
+                    onSearch = { viewModel.search() },
+                    onClear = { viewModel.clearSearch() },
+                    isLoading = viewModel.isSearching,
+                    errorMessage = viewModel.searchError,
+                )
+
+                if (viewModel.searchQuery.isNotBlank()) {
+                    Text(
+                        text = "Using Semantic Search. Sorting by relevance.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier =
+                            Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 8.dp),
+                    )
+                }
+
+                Row(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    SortDropdownMenu(
+                        selectedSort = viewModel.selectedSort,
+                        onSortChange = { viewModel.onSortChange(it) },
+                        enabled = !viewModel.isSearching && homeUiState.recipes.isNotEmpty(),
+                    )
+                }
+
+                RecipesList(
+                    recipes = homeUiState.recipes,
+                    hasMore = viewModel.hasMore,
+                    isLoadingMore = viewModel.isLoadingMore,
+                    onLoadMore = { viewModel.loadMore() },
+                )
+            }
         }
 
         is HomeUiState.Error -> {
             ErrorScreen(modifier = modifier)
-        }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize(),
-    ) {
-        Text(text = "Failed to load recipes. Check your connection.")
-    }
-}
-
-@Composable
-fun RecipeList(
-    recipes: List<RecipesFindAll200ResponseInner>,
-    hasMore: Boolean,
-    isLoadingMore: Boolean,
-    onLoadMore: () -> Unit,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = contentPadding,
-    ) {
-        items(recipes) { recipe ->
-            RecipeCard(recipe = recipe)
-        }
-
-        if (hasMore) {
-            item {
-                LoadMoreButton(
-                    onClick = onLoadMore,
-                    isLoading = isLoadingMore,
-                )
-            }
         }
     }
 }

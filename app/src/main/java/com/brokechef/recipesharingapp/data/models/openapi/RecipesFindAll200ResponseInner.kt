@@ -13,9 +13,9 @@
     "UnusedImport"
 )
 
-package com.brokechef.recipesharingapp.data.models
+package com.brokechef.recipesharingapp.data.models.openapi
 
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInnerAuthor
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInnerAuthor
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -51,7 +51,7 @@ data class RecipesFindAll200ResponseInner (
     val duration: kotlin.Int,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-08T15:38:13.047Z",
+    val createdAt: kotlin.String = "2026-02-11T12:39:05.182Z",
 
     @SerialName(value = "author")
     val author: RecipesFindAll200ResponseInnerAuthor,

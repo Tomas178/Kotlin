@@ -13,9 +13,9 @@
     "UnusedImport"
 )
 
-package com.brokechef.recipesharingapp.data.models
+package com.brokechef.recipesharingapp.data.models.openapi
 
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll400ResponseIssuesInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch400ResponseIssuesInner
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -30,7 +30,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class RecipesFindAll400Response (
+data class RecipesSearch400Response (
 
     @SerialName(value = "message")
     val message: kotlin.String?,
@@ -39,7 +39,7 @@ data class RecipesFindAll400Response (
     val code: kotlin.String?,
 
     @SerialName(value = "issues")
-    val issues: kotlin.collections.List<RecipesFindAll400ResponseIssuesInner>? = null
+    val issues: kotlin.collections.List<RecipesSearch400ResponseIssuesInner>? = null
 
 ) {
 

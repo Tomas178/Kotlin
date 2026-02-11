@@ -16,6 +16,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.brokechef.recipesharingapp.ui.components.AppDrawer
 import com.brokechef.recipesharingapp.ui.components.AppTopBar
+import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
 import com.brokechef.recipesharingapp.ui.navigation.AppNavGraph
 import com.brokechef.recipesharingapp.ui.navigation.Screen
 import com.brokechef.recipesharingapp.ui.viewModels.AuthState

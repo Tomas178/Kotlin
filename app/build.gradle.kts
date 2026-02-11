@@ -12,7 +12,7 @@ openApiGenerate {
     inputSpec.set("$projectDir/specs/openapi-spec.json")
     outputDir.set(layout.buildDirectory.dir("generate-resources/openapi").map { it.asFile.absolutePath })
     apiPackage.set("com.brokechef.recipesharingapp.api")
-    modelPackage.set("com.brokechef.recipesharingapp.data.models")
+    modelPackage.set("com.brokechef.recipesharingapp.data.models.openapi")
     configOptions.set(
         mapOf(
             "library" to "jvm-ktor",

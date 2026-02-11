@@ -1,7 +1,8 @@
 package com.brokechef.recipesharingapp.data.repository
 
 import com.brokechef.recipesharingapp.api.RecipesApi
-import com.brokechef.recipesharingapp.data.models.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
@@ -58,6 +59,31 @@ class RecipesRepository {
         } catch (e: Exception) {
             e.printStackTrace()
             return 0
+        }
+    }
+
+    suspend fun search(
+        userInput: String,
+        limit: Int,
+        offset: Int,
+    ): List<RecipesSearch200ResponseInner> {
+        try {
+            val result =
+                api.recipesSearch(
+                    userInput = userInput,
+                    offset = offset,
+                    limit = limit,
+                )
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return emptyList()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyList()
         }
     }
 }
