@@ -33,10 +33,10 @@ import kotlinx.serialization.Contextual
 data class RecipesSearch400Response (
 
     @SerialName(value = "message")
-    val message: kotlin.String?,
+    val message: kotlin.String,
 
     @SerialName(value = "code")
-    val code: kotlin.String?,
+    val code: kotlin.String,
 
     @SerialName(value = "issues")
     val issues: kotlin.collections.List<RecipesSearch400ResponseIssuesInner>? = null

@@ -75,6 +75,43 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
+        * GET /recipes/findAllRecommended
+        * Fetch all recommended recipes
+        * 
+         * @param offset  (optional, default to 0)
+         * @param limit  (optional, default to 5)
+         * @return kotlin.collections.List<RecipesFindAll200ResponseInner>
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun recipesFindAllRecommended(offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesFindAll200ResponseInner>> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
+            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/recipes/findAllRecommended",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
         * GET /recipes/search
         * Search recipes semantically
         * 

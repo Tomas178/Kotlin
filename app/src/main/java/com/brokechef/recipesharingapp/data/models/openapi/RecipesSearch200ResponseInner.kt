@@ -51,7 +51,7 @@ data class RecipesSearch200ResponseInner (
     val duration: kotlin.Int,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-11T12:39:05.182Z",
+    val createdAt: kotlin.String = "2026-02-11T17:47:07.925Z",
 
     @SerialName(value = "author")
     val author: RecipesSearch200ResponseInnerAuthor,
@@ -60,7 +60,7 @@ data class RecipesSearch200ResponseInner (
     val steps: kotlin.String,
 
     @SerialName(value = "imageUrl")
-    val imageUrl: kotlin.String? = null,
+    val imageUrl: kotlin.String,
 
     @SerialName(value = "rating")
     val rating: kotlin.Int? = null

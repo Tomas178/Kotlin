@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 
 class RecipesRepository {
     private val api =
-        RecipesApi(baseUrl = "http://10.0.2.2:3000/api/v1", httpClientConfig = {
+        RecipesApi(baseUrl = "http://10.0.2.2:3000/api/v1/rest", httpClientConfig = {
             it.install(ContentNegotiation) {
                 json(
                     Json {

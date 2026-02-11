@@ -30,7 +30,7 @@ import kotlinx.serialization.Contextual
 data class RecipesSearch400ResponseIssuesInner (
 
     @SerialName(value = "message")
-    val message: kotlin.String?
+    val message: kotlin.String
 
 ) {
 
