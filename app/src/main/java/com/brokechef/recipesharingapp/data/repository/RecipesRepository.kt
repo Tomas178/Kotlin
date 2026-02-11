@@ -1,14 +1,19 @@
 package com.brokechef.recipesharingapp.data.repository
 
 import com.brokechef.recipesharingapp.api.RecipesApi
+import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.header
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-class RecipesRepository {
+class RecipesRepository(
+    private val tokenManager: TokenManager,
+) {
     private val api =
         RecipesApi(baseUrl = "http://10.0.2.2:3000/api/v1/rest", httpClientConfig = {
             it.install(ContentNegotiation) {
@@ -18,6 +23,12 @@ class RecipesRepository {
                         isLenient = true
                     },
                 )
+            }
+            it.defaultRequest {
+                val token = tokenManager.getToken()
+                if (token != null) {
+                    header("Cookie", "better-auth.session_token=$token")
+                }
             }
         })
 
@@ -33,6 +44,25 @@ class RecipesRepository {
                     limit = limit,
                     sort = sort,
                 )
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return emptyList()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return emptyList()
+        }
+    }
+
+    suspend fun getAllRecommended(
+        offset: Int,
+        limit: Int,
+    ): List<RecipesFindAll200ResponseInner> {
+        try {
+            val result = api.recipesFindAllRecommended(offset = offset, limit = limit)
 
             if (result.response.status.isSuccess()) {
                 return result.body()

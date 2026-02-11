@@ -43,12 +43,6 @@ data class AuthUser(
 )
 
 @Serializable
-data class AuthSession(
-    val token: String,
-    val userId: String,
-)
-
-@Serializable
 data class AuthResponse(
     val token: String,
     val user: AuthUser,
@@ -113,7 +107,18 @@ class AuthService(
             val body = response.bodyAsText()
             if (response.status == HttpStatusCode.OK) {
                 try {
-                    Result.success(lenientJson.decodeFromString<AuthResponse>(body))
+                    val authResponse = lenientJson.decodeFromString<AuthResponse>(body)
+
+                    val setCookie =
+                        response.headers
+                            .getAll("Set-Cookie")
+                            ?.firstOrNull { it.startsWith("better-auth.session_token=") }
+                    val signedToken =
+                        setCookie
+                            ?.substringAfter("better-auth.session_token=")
+                            ?.substringBefore(";")
+
+                    Result.success(authResponse.copy(token = signedToken ?: authResponse.token))
                 } catch (e: Exception) {
                     Result.failure(Exception(parseError(body, "Sign in failed")))
                 }
@@ -127,7 +132,7 @@ class AuthService(
     suspend fun signOut(token: String): Result<Unit> =
         try {
             client.post("$baseUrl/api/auth/sign-out") {
-                header("Authorization", "Bearer $token")
+                header("Cookie", "better-auth.session_token=$token")
             }
             Result.success(Unit)
         } catch (e: Exception) {
@@ -138,7 +143,7 @@ class AuthService(
         try {
             val response =
                 client.get("$baseUrl/api/auth/get-session") {
-                    header("Authorization", "Bearer $token")
+                    header("Cookie", "better-auth.session_token=$token")
                 }
             val body = response.bodyAsText()
             if (response.status == HttpStatusCode.OK) {

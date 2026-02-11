@@ -1,11 +1,14 @@
 package com.brokechef.recipesharingapp.ui.viewModels
 
+import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.enums.SortingTypes
 import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
@@ -22,8 +25,11 @@ sealed interface HomeUiState {
     data object Loading : HomeUiState
 }
 
-class HomeViewModel : ViewModel() {
-    private val recipesRepository = RecipesRepository()
+class HomeViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
+    private val tokenManager = TokenManager(application)
+    private val recipesRepository = RecipesRepository(tokenManager)
 
     companion object {
         const val RECIPES_PER_PAGE = 12
@@ -67,11 +73,18 @@ class HomeViewModel : ViewModel() {
     private suspend fun loadRecipes() {
         try {
             val result =
-                recipesRepository.getAllRecipes(
-                    offset = allRecipes.size,
-                    limit = RECIPES_PER_PAGE,
-                    sort = selectedSort.value,
-                )
+                if (selectedSort == SortingTypes.RECOMMENDED) {
+                    recipesRepository.getAllRecommended(
+                        offset = allRecipes.size,
+                        limit = RECIPES_PER_PAGE,
+                    )
+                } else {
+                    recipesRepository.getAllRecipes(
+                        offset = allRecipes.size,
+                        limit = RECIPES_PER_PAGE,
+                        sort = selectedSort.value,
+                    )
+                }
             allRecipes.addAll(result)
             homeUiState = HomeUiState.Success(allRecipes.toList())
         } catch (e: Exception) {
