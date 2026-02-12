@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier,
-    text: String = "Something went wrong",
+    text: String = "Something went wrong. Please try again.",
 ) {
     Box(
         contentAlignment = Alignment.Center,

@@ -19,7 +19,7 @@ import com.brokechef.recipesharingapp.ui.components.SearchBar
 import com.brokechef.recipesharingapp.ui.components.SortDropdownMenu
 import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
 import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
-import com.brokechef.recipesharingapp.ui.navigation.Screen
+import com.brokechef.recipesharingapp.ui.navigation.navigateToRecipe
 import com.brokechef.recipesharingapp.ui.viewModels.HomeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.HomeViewModel
 
@@ -78,7 +78,7 @@ fun HomeScreen(
                     isLoadingMore = viewModel.isLoadingMore,
                     onLoadMore = { viewModel.loadMore() },
                     onRecipeClick = { recipeId ->
-                        navController.navigate(Screen.Recipe.createRoute(recipeId))
+                        navController.navigateToRecipe(recipeId = recipeId)
                     },
                 )
             }
