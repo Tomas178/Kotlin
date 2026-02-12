@@ -15,7 +15,7 @@ sealed class Screen(
     object CreateRecipe : Screen("create-recipe", "Create Recipe")
 
     object Recipe : Screen("recipe/{id}", "Recipe") {
-        fun createRoute(id: String) = "recipe/$id"
+        fun createRoute(id: Int) = "recipe/$id"
     }
 
     object MyProfile : Screen("profile", "My Profile")

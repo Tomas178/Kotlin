@@ -13,16 +13,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.brokechef.recipesharingapp.ui.components.RecipesList
 import com.brokechef.recipesharingapp.ui.components.SearchBar
 import com.brokechef.recipesharingapp.ui.components.SortDropdownMenu
 import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
 import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
+import com.brokechef.recipesharingapp.ui.navigation.Screen
 import com.brokechef.recipesharingapp.ui.viewModels.HomeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.HomeViewModel
 
 @Composable
 fun HomeScreen(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(),
 ) {
@@ -74,12 +77,18 @@ fun HomeScreen(
                     hasMore = viewModel.hasMore,
                     isLoadingMore = viewModel.isLoadingMore,
                     onLoadMore = { viewModel.loadMore() },
+                    onRecipeClick = { recipeId ->
+                        navController.navigate(Screen.Recipe.createRoute(recipeId))
+                    },
                 )
             }
         }
 
         is HomeUiState.Error -> {
-            ErrorScreen(modifier = modifier)
+            ErrorScreen(
+                modifier = modifier,
+                text = "Failed to load recipes. Check your connection.",
+            )
         }
     }
 }

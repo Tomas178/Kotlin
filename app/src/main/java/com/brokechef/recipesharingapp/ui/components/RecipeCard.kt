@@ -47,11 +47,12 @@ import java.util.Locale
 fun RecipeCard(
     recipe: RecipesFindAll200ResponseInner,
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null,
+    onClick: () -> Unit,
 ) {
     var isImageLoading by remember { mutableStateOf(true) }
 
     Card(
+        onClick = onClick,
         modifier =
             modifier
                 .fillMaxWidth()
@@ -59,7 +60,6 @@ fun RecipeCard(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = CardBackground),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        onClick = { onClick?.invoke() },
     ) {
         Column {
             Box(
@@ -71,32 +71,24 @@ fun RecipeCard(
                         .background(ImagePlaceholder),
                 contentAlignment = Alignment.Center,
             ) {
-                if (recipe.imageUrl != null) {
-                    AsyncImage(
-                        model =
-                            ImageRequest
-                                .Builder(LocalContext.current)
-                                .data(recipe.imageUrl)
-                                .crossfade(true)
-                                .build(),
-                        contentDescription = recipe.title,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize(),
-                        onSuccess = { isImageLoading = false },
-                        onError = { isImageLoading = false },
-                    )
-                    if (isImageLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(32.dp),
-                            color = PrimaryGreen,
-                            strokeWidth = 3.dp,
-                        )
-                    }
-                } else {
-                    Text(
-                        text = "No Image",
-                        color = Color.Gray,
-                        style = MaterialTheme.typography.bodyMedium,
+                AsyncImage(
+                    model =
+                        ImageRequest
+                            .Builder(LocalContext.current)
+                            .data(recipe.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                    contentDescription = recipe.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                    onSuccess = { isImageLoading = false },
+                    onError = { isImageLoading = false },
+                )
+                if (isImageLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp),
+                        color = PrimaryGreen,
+                        strokeWidth = 3.dp,
                     )
                 }
             }

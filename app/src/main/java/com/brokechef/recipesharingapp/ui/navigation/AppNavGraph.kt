@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.brokechef.recipesharingapp.ui.screens.HomeScreen
 import com.brokechef.recipesharingapp.ui.screens.PlaceholderScreen
+import com.brokechef.recipesharingapp.ui.screens.RecipeScreen
 
 @Composable
 fun AppNavGraph(
@@ -21,17 +22,17 @@ fun AppNavGraph(
         modifier = modifier,
     ) {
         composable(Screen.Home.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
         }
         composable(Screen.CreateRecipe.route) {
             PlaceholderScreen(title = "Create Recipe")
         }
         composable(
             route = Screen.Recipe.route,
-            arguments = listOf(navArgument("id") { type = NavType.StringType }),
+            arguments = listOf(navArgument("id") { type = NavType.IntType }),
         ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id") ?: ""
-            PlaceholderScreen(title = "Recipe: $id")
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            RecipeScreen(recipeId = id)
         }
         composable(Screen.MyProfile.route) {
             PlaceholderScreen(title = "My Profile")

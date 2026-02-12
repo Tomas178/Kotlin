@@ -17,6 +17,7 @@ fun RecipesList(
     hasMore: Boolean,
     isLoadingMore: Boolean,
     onLoadMore: () -> Unit,
+    onRecipeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
@@ -25,7 +26,10 @@ fun RecipesList(
         contentPadding = contentPadding,
     ) {
         items(recipes) { recipe ->
-            RecipeCard(recipe = recipe)
+            RecipeCard(
+                recipe = recipe,
+                onClick = { onRecipeClick(recipe.id) },
+            )
         }
 
         if (hasMore) {

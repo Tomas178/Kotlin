@@ -3,10 +3,12 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.api.RecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -114,6 +116,25 @@ class RecipesRepository(
         } catch (e: Exception) {
             e.printStackTrace()
             return emptyList()
+        }
+    }
+
+    suspend fun findById(id: Int): RecipesFindById200Response? {
+        try {
+            val result = api.recipesFindById(id)
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            }
+
+            when (val statusCode = result.response.status.value) {
+                401 -> throw Exception("Please log in to view this recipe.")
+                404 -> throw Exception("Recipe not found.")
+                else -> throw Exception("Failed to load recipe (error $statusCode).")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
         }
     }
 }
