@@ -181,6 +181,76 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
+        * GET /recipes/isAuthor
+        * Check if the user is the author of the recipe
+        * 
+         * @param id  
+         * @return kotlin.Boolean
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun recipesIsAuthor(id: kotlin.Int): HttpResponse<kotlin.Boolean> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            id?.apply { localVariableQuery["id"] = listOf("$id") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/recipes/isAuthor",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * DELETE /recipes/remove
+        * Delete the recipe
+        * 
+         * @param id  
+         * @return kotlin.Any
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun recipesRemove(id: kotlin.Int): HttpResponse<kotlin.Any> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            id?.apply { localVariableQuery["id"] = listOf("$id") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.DELETE,
+            "/recipes/remove",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
         * GET /recipes/search
         * Search recipes semantically
         * 
