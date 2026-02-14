@@ -138,7 +138,7 @@ class HomeViewModel(
                         offset = 0,
                     )
                 isInSearchMode = true
-                homeUiState = HomeUiState.Success(results.map { it.toRecipeFindAll() })
+                homeUiState = HomeUiState.Success(results)
             } catch (e: Exception) {
                 searchError = "Search failed. Please try again."
             } finally {

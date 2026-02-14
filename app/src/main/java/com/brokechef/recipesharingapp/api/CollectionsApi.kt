@@ -15,10 +15,10 @@
 
 package com.brokechef.recipesharingapp.api
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200Response
+import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreate200Response
+import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreateRequest
+import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreateRequest
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 
 import org.openapitools.client.infrastructure.*
@@ -27,7 +27,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.http.ParametersBuilder
 
-    open class RecipesApi(
+    open class CollectionsApi(
     baseUrl: String = ApiClient.BASE_URL,
     httpClientEngine: HttpClientEngine? = null,
     httpClientConfig: ((HttpClientConfig<*>) -> Unit)? = null,
@@ -38,18 +38,18 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * POST /recipes/create
-        * Create the recipe
+        * POST /collections/create
+        * Create a collection
         * 
-         * @param recipesCreateRequest  
-         * @return RecipesCreate200Response
+         * @param collectionsCreateRequest  
+         * @return CollectionsCreate200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesCreate(recipesCreateRequest: RecipesCreateRequest): HttpResponse<RecipesCreate200Response> {
+        open suspend fun collectionsCreate(collectionsCreateRequest: CollectionsCreateRequest): HttpResponse<CollectionsCreate200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
-            val localVariableBody = recipesCreateRequest
+            val localVariableBody = collectionsCreateRequest
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
 
@@ -57,7 +57,7 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.POST,
-            "/recipes/create",
+            "/collections/create",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -71,90 +71,14 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/all
-        * Fetch all recipes
-        * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @param sort  (optional, default to Sort.newest)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAll(offset: kotlin.Int?, limit: kotlin.Int?, sort: kotlin.String?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            sort?.apply { localVariableQuery["sort"] = listOf("$sort") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/all",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/findAllRecommended
-        * Fetch all recommended recipes
-        * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAllRecommended(offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/findAllRecommended",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/{id}
-        * Get recipe by given ID
+        * GET /collections/findById
+        * Find collection by ID
         * 
          * @param id  
-         * @return RecipesFindById200Response
+         * @return CollectionsCreate200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindById(id: kotlin.Int): HttpResponse<RecipesFindById200Response> {
+        open suspend fun collectionsFindById(id: kotlin.Int): HttpResponse<CollectionsCreate200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -162,12 +86,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
+            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/{id}".replace("{" + "id" + "}", "$id"),
+            "/collections/findById",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -181,16 +106,49 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/search
-        * Search recipes semantically
+        * GET /collections/findByUserId
+        * Get all collections by the user
         * 
-         * @param userInput  
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
+         * @param userId  (optional)
+         * @return kotlin.collections.List<CollectionsFindByUserId200ResponseInner>
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun collectionsFindByUserId(userId: kotlin.String?): HttpResponse<kotlin.collections.List<CollectionsFindByUserId200ResponseInner>> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/collections/findByUserId",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /collections/findRecipesByCollectionId
+        * Find all recipes in the collection
+        * 
+         * @param id  
          * @return kotlin.collections.List<RecipesSearch200ResponseInner>
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesSearch(userInput: kotlin.String, offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+        open suspend fun collectionsFindRecipesByCollectionId(id: kotlin.Int): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -198,15 +156,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            userInput?.apply { localVariableQuery["userInput"] = listOf("$userInput") }
+            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/search",
+            "/collections/findRecipesByCollectionId",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -220,13 +176,49 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/totalCount
-        * Get total count of recipes
+        * DELETE /collections/remove
+        * Deletes the collection
         * 
+         * @param id  
+         * @return kotlin.Any
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun collectionsRemove(id: kotlin.Int): HttpResponse<kotlin.Any> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            id?.apply { localVariableQuery["id"] = listOf("$id") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.DELETE,
+            "/collections/remove",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /collections/totalCount
+        * Get total count of collections for user
+        * 
+         * @param userId  (optional)
          * @return kotlin.Int
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesTotalCount(): HttpResponse<kotlin.Int> {
+        open suspend fun collectionsTotalCollectionsByUser(userId: kotlin.String?): HttpResponse<kotlin.Int> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -234,12 +226,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/totalCount",
+            "/collections/totalCount",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

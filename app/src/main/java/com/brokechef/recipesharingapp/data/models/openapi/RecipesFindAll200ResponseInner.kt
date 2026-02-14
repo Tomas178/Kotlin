@@ -10,63 +10,45 @@
     "ArrayInDataClass",
     "EnumEntryName",
     "RemoveRedundantQualifierName",
-    "UnusedImport"
+    "UnusedImport",
 )
 
 package com.brokechef.recipesharingapp.data.models.openapi
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInnerAuthor
-
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 /**
- * 
  *
- * @param id 
- * @param userId 
- * @param title 
- * @param duration 
- * @param createdAt 
- * @param author 
- * @param imageUrl 
- * @param steps 
- * @param rating 
+ *
+ * @param id
+ * @param userId
+ * @param title
+ * @param duration
+ * @param createdAt
+ * @param author
+ * @param imageUrl
+ * @param steps
+ * @param rating
  */
 @Serializable
-
-data class RecipesFindAll200ResponseInner (
-
+data class RecipesFindAll200ResponseInner(
     @SerialName(value = "id")
-    val id: kotlin.Int,
-
+    val id: Int,
     @SerialName(value = "userId")
-    val userId: kotlin.String,
-
+    val userId: String,
     @SerialName(value = "title")
-    val title: kotlin.String,
-
+    val title: String,
     @SerialName(value = "duration")
-    val duration: kotlin.Int,
-
+    val duration: Int,
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-11T21:31:25.482Z",
-
+    val createdAt: String = "2026-02-12T17:56:11.493Z",
     @SerialName(value = "author")
     val author: RecipesFindAll200ResponseInnerAuthor,
-
     @SerialName(value = "imageUrl")
-    val imageUrl: kotlin.String,
-
+    val imageUrl: String?,
     @SerialName(value = "steps")
-    val steps: kotlin.String,
-
+    val steps: String,
     @SerialName(value = "rating")
-    val rating: kotlin.Int? = null
-
-) {
-
-
-}
-
+    val rating: Int? = null,
+)

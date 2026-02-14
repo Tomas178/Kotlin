@@ -15,7 +15,7 @@
 
 package com.brokechef.recipesharingapp.data.models.openapi
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInnerAuthor
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200ResponseAuthor
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -36,7 +36,7 @@ import kotlinx.serialization.Contextual
  */
 @Serializable
 
-data class RecipesSearch200ResponseInner (
+data class RecipesCreate200Response (
 
     @SerialName(value = "id")
     val id: kotlin.Int,
@@ -54,7 +54,7 @@ data class RecipesSearch200ResponseInner (
     val createdAt: kotlin.String = "2026-02-13T20:49:33.908Z",
 
     @SerialName(value = "author")
-    val author: RecipesSearch200ResponseInnerAuthor,
+    val author: RecipesCreate200ResponseAuthor,
 
     @SerialName(value = "imageUrl")
     val imageUrl: kotlin.String?,

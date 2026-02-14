@@ -15,11 +15,10 @@
 
 package com.brokechef.recipesharingapp.api
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200Response
+import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
+import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollowRequest
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreateRequest
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 
 import org.openapitools.client.infrastructure.*
 import io.ktor.client.HttpClientConfig
@@ -27,7 +26,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.http.ParametersBuilder
 
-    open class RecipesApi(
+    open class FollowsApi(
     baseUrl: String = ApiClient.BASE_URL,
     httpClientEngine: HttpClientEngine? = null,
     httpClientConfig: ((HttpClientConfig<*>) -> Unit)? = null,
@@ -38,18 +37,18 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * POST /recipes/create
-        * Create the recipe
+        * POST /follows/create
+        * Follow the user
         * 
-         * @param recipesCreateRequest  
-         * @return RecipesCreate200Response
+         * @param followsFollowRequest  
+         * @return FollowsFollow200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesCreate(recipesCreateRequest: RecipesCreateRequest): HttpResponse<RecipesCreate200Response> {
+        open suspend fun followsFollow(followsFollowRequest: FollowsFollowRequest): HttpResponse<FollowsFollow200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
-            val localVariableBody = recipesCreateRequest
+            val localVariableBody = followsFollowRequest
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
 
@@ -57,7 +56,7 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.POST,
-            "/recipes/create",
+            "/follows/create",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -71,16 +70,14 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/all
-        * Fetch all recipes
+        * GET /follows/getFollowers
+        * Get all the followers that the user has
         * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @param sort  (optional, default to Sort.newest)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
+         * @param userId  (optional)
+         * @return kotlin.collections.List<UsersFindById200Response>
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAll(offset: kotlin.Int?, limit: kotlin.Int?, sort: kotlin.String?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+        open suspend fun followsGetFollowers(userId: kotlin.String?): HttpResponse<kotlin.collections.List<UsersFindById200Response>> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -88,15 +85,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            sort?.apply { localVariableQuery["sort"] = listOf("$sort") }
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/all",
+            "/follows/getFollowers",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -110,15 +105,14 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/findAllRecommended
-        * Fetch all recommended recipes
+        * GET /follows/getFollowing
+        * Get all the users that user is following
         * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
+         * @param userId  (optional)
+         * @return kotlin.collections.List<UsersFindById200Response>
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAllRecommended(offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+        open suspend fun followsGetFollowing(userId: kotlin.String?): HttpResponse<kotlin.collections.List<UsersFindById200Response>> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -126,14 +120,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/findAllRecommended",
+            "/follows/getFollowing",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -147,14 +140,14 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/{id}
-        * Get recipe by given ID
+        * GET /follows/isFollowing
+        * Check if the user is following the given user
         * 
-         * @param id  
-         * @return RecipesFindById200Response
+         * @param userId  
+         * @return kotlin.Boolean
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindById(id: kotlin.Int): HttpResponse<RecipesFindById200Response> {
+        open suspend fun followsIsFollowing(userId: kotlin.String): HttpResponse<kotlin.Boolean> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -162,12 +155,13 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/{id}".replace("{" + "id" + "}", "$id"),
+            "/follows/isFollowing",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -181,52 +175,14 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /recipes/search
-        * Search recipes semantically
+        * GET /follows/totalFollowers
+        * Get the total count of total followers that the user has
         * 
-         * @param userInput  
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesSearch(userInput: kotlin.String, offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            userInput?.apply { localVariableQuery["userInput"] = listOf("$userInput") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/search",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/totalCount
-        * Get total count of recipes
-        * 
+         * @param userId  (optional)
          * @return kotlin.Int
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesTotalCount(): HttpResponse<kotlin.Int> {
+        open suspend fun followsTotalFollowers(userId: kotlin.String?): HttpResponse<kotlin.Int> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -234,12 +190,83 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/recipes/totalCount",
+            "/follows/totalFollowers",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /follows/totalFollowing
+        * Get the total count of total users that the user is following
+        * 
+         * @param userId  (optional)
+         * @return kotlin.Int
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun followsTotalFollowing(userId: kotlin.String?): HttpResponse<kotlin.Int> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/follows/totalFollowing",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * DELETE /follows/remove
+        * Unfollow user
+        * 
+         * @param userId  
+         * @return kotlin.Any
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun followsUnfollow(userId: kotlin.String): HttpResponse<kotlin.Any> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.DELETE,
+            "/follows/remove",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

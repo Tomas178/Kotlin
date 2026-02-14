@@ -2,9 +2,9 @@ package com.brokechef.recipesharingapp.data.repository
 
 import com.brokechef.recipesharingapp.api.RecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
+import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -48,7 +48,7 @@ class RecipesRepository(
                 )
 
             if (result.response.status.isSuccess()) {
-                return result.body()
+                return result.body().map { it.toRecipeFindAll() }
             } else {
                 println("API Error: ${result.response.status.value} - ${result.response.status.description}")
                 return emptyList()
@@ -67,7 +67,7 @@ class RecipesRepository(
             val result = api.recipesFindAllRecommended(offset = offset, limit = limit)
 
             if (result.response.status.isSuccess()) {
-                return result.body()
+                return result.body().map { it.toRecipeFindAll() }
             } else {
                 println("API Error: ${result.response.status.value} - ${result.response.status.description}")
                 return emptyList()
@@ -98,7 +98,7 @@ class RecipesRepository(
         userInput: String,
         limit: Int,
         offset: Int,
-    ): List<RecipesSearch200ResponseInner> {
+    ): List<RecipesFindAll200ResponseInner> {
         try {
             val result =
                 api.recipesSearch(
@@ -108,7 +108,7 @@ class RecipesRepository(
                 )
 
             if (result.response.status.isSuccess()) {
-                return result.body()
+                return result.body().map { it.toRecipeFindAll() }
             } else {
                 println("API Error: ${result.response.status.value} - ${result.response.status.description}")
                 return emptyList()
@@ -128,8 +128,8 @@ class RecipesRepository(
             }
 
             when (val statusCode = result.response.status.value) {
-                401 -> throw Exception("Please log in to view this recipe.")
-                404 -> throw Exception("Recipe not found.")
+                HttpStatusCode.Unauthorized.value -> throw Exception("Please log in to view this recipe.")
+                HttpStatusCode.NotFound.value -> throw Exception("Recipe not found.")
                 else -> throw Exception("Failed to load recipe (error $statusCode).")
             }
         } catch (e: Exception) {

@@ -15,7 +15,6 @@
 
 package com.brokechef.recipesharingapp.data.models.openapi
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInnerAuthor
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
@@ -24,27 +23,16 @@ import kotlinx.serialization.Contextual
 /**
  * 
  *
- * @param id 
- * @param userId 
  * @param title 
  * @param duration 
  * @param steps 
- * @param createdAt 
- * @param author 
- * @param imageUrl 
  * @param ingredients 
  * @param tools 
- * @param rating 
+ * @param imageUrl 
  */
 @Serializable
 
-data class RecipesFindById200Response (
-
-    @SerialName(value = "id")
-    val id: kotlin.Int,
-
-    @SerialName(value = "userId")
-    val userId: kotlin.String,
+data class RecipesCreateRequest (
 
     @SerialName(value = "title")
     val title: kotlin.String,
@@ -55,23 +43,14 @@ data class RecipesFindById200Response (
     @SerialName(value = "steps")
     val steps: kotlin.collections.List<kotlin.String>,
 
-    @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-13T20:49:33.908Z",
-
-    @SerialName(value = "author")
-    val author: RecipesSearch200ResponseInnerAuthor,
-
-    @SerialName(value = "imageUrl")
-    val imageUrl: kotlin.String?,
-
     @SerialName(value = "ingredients")
     val ingredients: kotlin.collections.List<kotlin.String>,
 
     @SerialName(value = "tools")
     val tools: kotlin.collections.List<kotlin.String>,
 
-    @SerialName(value = "rating")
-    val rating: kotlin.Int? = null
+    @SerialName(value = "imageUrl")
+    val imageUrl: kotlin.String? = null
 
 ) {
 

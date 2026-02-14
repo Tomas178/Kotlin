@@ -15,11 +15,11 @@
 
 package com.brokechef.recipesharingapp.api
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreateRequest
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
+import com.brokechef.recipesharingapp.data.models.openapi.UsersGetRecipes200Response
+import com.brokechef.recipesharingapp.data.models.openapi.UsersUpdateImageRequest
 
 import org.openapitools.client.infrastructure.*
 import io.ktor.client.HttpClientConfig
@@ -27,7 +27,7 @@ import io.ktor.client.request.forms.formData
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.http.ParametersBuilder
 
-    open class RecipesApi(
+    open class UsersApi(
     baseUrl: String = ApiClient.BASE_URL,
     httpClientEngine: HttpClientEngine? = null,
     httpClientConfig: ((HttpClientConfig<*>) -> Unit)? = null,
@@ -38,214 +38,254 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * POST /recipes/create
-        * Create the recipe
+        * GET /users/findById
+        * Get user by ID
         * 
-         * @param recipesCreateRequest  
-         * @return RecipesCreate200Response
+         * @param userId  (optional)
+         * @return UsersFindById200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesCreate(recipesCreateRequest: RecipesCreateRequest): HttpResponse<RecipesCreate200Response> {
+        open suspend fun usersFindById(userId: kotlin.String?): HttpResponse<UsersFindById200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
-            val localVariableBody = recipesCreateRequest
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/findById",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /users/getCreatedRecipes
+        * Get created recipes by the user
+        * 
+         * @param offset  (optional, default to 0)
+         * @param limit  (optional, default to 5)
+         * @param userId  (optional)
+         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersGetCreatedRecipes(offset: kotlin.Int?, limit: kotlin.Int?, userId: kotlin.String?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
+            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/getCreatedRecipes",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /users/getRecipes
+        * Get all created and saved recipes by the user
+        * 
+         * @param offset  (optional, default to 0)
+         * @param limit  (optional, default to 5)
+         * @param userId  (optional)
+         * @return UsersGetRecipes200Response
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersGetRecipes(offset: kotlin.Int?, limit: kotlin.Int?, userId: kotlin.String?): HttpResponse<UsersGetRecipes200Response> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
+            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/getRecipes",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /users/getSavedRecipes
+        * Get saved recipes by the user
+        * 
+         * @param offset  (optional, default to 0)
+         * @param limit  (optional, default to 5)
+         * @param userId  (optional)
+         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersGetSavedRecipes(offset: kotlin.Int?, limit: kotlin.Int?, userId: kotlin.String?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
+            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/getSavedRecipes",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /users/totalCreated
+        * Get total count of created recipes by the user
+        * 
+         * @param userId  (optional)
+         * @return kotlin.Int
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersTotalCreated(userId: kotlin.String?): HttpResponse<kotlin.Int> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/totalCreated",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * GET /users/totalSaved
+        * Get total count of saved recipes by the user
+        * 
+         * @param userId  (optional)
+         * @return kotlin.Int
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersTotalSaved(userId: kotlin.String?): HttpResponse<kotlin.Int> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.GET,
+            "/users/totalSaved",
+            query = localVariableQuery,
+            headers = localVariableHeaders,
+            requiresAuthentication = true,
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
+        * PATCH /users/updateImage
+        * Update image url
+        * 
+         * @param usersUpdateImageRequest  
+         * @return kotlin.String
+        */
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun usersUpdateImage(usersUpdateImageRequest: UsersUpdateImageRequest): HttpResponse<kotlin.String> {
+
+            val localVariableAuthNames = listOf<String>("Authorization")
+
+            val localVariableBody = usersUpdateImageRequest
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.POST,
-            "/recipes/create",
+            RequestMethod.PATCH,
+            "/users/updateImage",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
             )
 
             return jsonRequest(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/all
-        * Fetch all recipes
-        * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @param sort  (optional, default to Sort.newest)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAll(offset: kotlin.Int?, limit: kotlin.Int?, sort: kotlin.String?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            sort?.apply { localVariableQuery["sort"] = listOf("$sort") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/all",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/findAllRecommended
-        * Fetch all recommended recipes
-        * 
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindAllRecommended(offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/findAllRecommended",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/{id}
-        * Get recipe by given ID
-        * 
-         * @param id  
-         * @return RecipesFindById200Response
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesFindById(id: kotlin.Int): HttpResponse<RecipesFindById200Response> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/{id}".replace("{" + "id" + "}", "$id"),
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/search
-        * Search recipes semantically
-        * 
-         * @param userInput  
-         * @param offset  (optional, default to 0)
-         * @param limit  (optional, default to 5)
-         * @return kotlin.collections.List<RecipesSearch200ResponseInner>
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesSearch(userInput: kotlin.String, offset: kotlin.Int?, limit: kotlin.Int?): HttpResponse<kotlin.collections.List<RecipesSearch200ResponseInner>> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-            offset?.apply { localVariableQuery["offset"] = listOf("$offset") }
-            limit?.apply { localVariableQuery["limit"] = listOf("$limit") }
-            userInput?.apply { localVariableQuery["userInput"] = listOf("$userInput") }
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/search",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
-            localVariableConfig,
-            localVariableBody,
-            localVariableAuthNames
-            ).wrap()
-            }
-
-        /**
-        * GET /recipes/totalCount
-        * Get total count of recipes
-        * 
-         * @return kotlin.Int
-        */
-            @Suppress("UNCHECKED_CAST")
-        open suspend fun recipesTotalCount(): HttpResponse<kotlin.Int> {
-
-            val localVariableAuthNames = listOf<String>("Authorization")
-
-            val localVariableBody = 
-                    io.ktor.client.utils.EmptyContent
-
-            val localVariableQuery = mutableMapOf<String, List<String>>()
-
-            val localVariableHeaders = mutableMapOf<String, String>()
-
-            val localVariableConfig = RequestConfig<kotlin.Any?>(
-            RequestMethod.GET,
-            "/recipes/totalCount",
-            query = localVariableQuery,
-            headers = localVariableHeaders,
-            requiresAuthentication = true,
-            )
-
-            return request(
             localVariableConfig,
             localVariableBody,
             localVariableAuthNames
