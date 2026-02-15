@@ -3,6 +3,8 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.api.RecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200Response
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreateRequest
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -131,6 +133,38 @@ class RecipesRepository(
                 HttpStatusCode.Unauthorized.value -> throw Exception("Please log in to view this recipe.")
                 HttpStatusCode.NotFound.value -> throw Exception("Recipe not found.")
                 else -> throw Exception("Failed to load recipe (error $statusCode).")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    suspend fun isAuthor(id: Int): Boolean {
+        try {
+            val result = api.recipesIsAuthor(id)
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return false
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    suspend fun create(input: RecipesCreateRequest): RecipesCreate200Response? {
+        try {
+            val result = api.recipesCreate(input)
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return null
             }
         } catch (e: Exception) {
             e.printStackTrace()
