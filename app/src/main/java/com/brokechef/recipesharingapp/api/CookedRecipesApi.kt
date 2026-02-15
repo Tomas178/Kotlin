@@ -108,10 +108,10 @@ import io.ktor.http.ParametersBuilder
         * Remove cooked recipe link from database
         * 
          * @param id  
-         * @return CookedRecipesMark200Response
+         * @return kotlin.Any
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun cookedRecipesUnmark(id: kotlin.Int): HttpResponse<CookedRecipesMark200Response> {
+        open suspend fun cookedRecipesUnmark(id: kotlin.Int): HttpResponse<kotlin.Any> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 

@@ -44,10 +44,10 @@ data class CollectionsCreate200Response (
     val title: kotlin.String,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-14T10:56:23.425Z",
+    val createdAt: kotlin.String = "2026-02-15T12:49:58.355Z",
 
     @SerialName(value = "updatedAt")
-    val updatedAt: kotlin.String = "2026-02-14T10:56:23.426Z",
+    val updatedAt: kotlin.String = "2026-02-15T12:49:58.359Z",
 
     @SerialName(value = "imageUrl")
     val imageUrl: kotlin.String? = null
