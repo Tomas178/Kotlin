@@ -3,7 +3,6 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.api.SavedRecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSave200Response
-import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSaveRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -16,7 +15,7 @@ class SavedRecipesRepository(
     private val tokenManager: TokenManager,
 ) {
     private val api =
-        SavedRecipesApi(baseUrl = "http://10.0.0.2:3000/api/v1/rest", httpClientConfig = {
+        SavedRecipesApi(baseUrl = "http://10.0.2.2:3000/api/v1/rest", httpClientConfig = {
             it.install(ContentNegotiation) {
                 json(
                     Json {
@@ -53,7 +52,7 @@ class SavedRecipesRepository(
         }
     }
 
-    suspend fun save(id: SavedRecipesSaveRequest): SavedRecipesSave200Response? {
+    suspend fun save(id: Int): SavedRecipesSave200Response? {
         try {
             val result = api.savedRecipesSave(id)
 

@@ -16,7 +16,6 @@
 package com.brokechef.recipesharingapp.api
 
 import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
-import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollowRequest
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 
@@ -37,18 +36,19 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * POST /follows/create
+        * POST /follows/{userId}
         * Follow the user
         * 
-         * @param followsFollowRequest  
+         * @param userId  
          * @return FollowsFollow200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun followsFollow(followsFollowRequest: FollowsFollowRequest): HttpResponse<FollowsFollow200Response> {
+        open suspend fun followsFollow(userId: kotlin.String): HttpResponse<FollowsFollow200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
-            val localVariableBody = followsFollowRequest
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
 
@@ -56,13 +56,13 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.POST,
-            "/follows/create",
+            "/follows/{userId}".replace("{" + "userId" + "}", "$userId"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
             )
 
-            return jsonRequest(
+            return request(
             localVariableConfig,
             localVariableBody,
             localVariableAuthNames
@@ -140,7 +140,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /follows/isFollowing
+        * GET /follows/isFollowing/{userId}
         * Check if the user is following the given user
         * 
          * @param userId  
@@ -155,13 +155,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/follows/isFollowing",
+            "/follows/isFollowing/{userId}".replace("{" + "userId" + "}", "$userId"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -245,7 +244,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * DELETE /follows/remove
+        * DELETE /follows/{userId}
         * Unfollow user
         * 
          * @param userId  
@@ -260,13 +259,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            userId?.apply { localVariableQuery["userId"] = listOf("$userId") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.DELETE,
-            "/follows/remove",
+            "/follows/{userId}".replace("{" + "userId" + "}", "$userId"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

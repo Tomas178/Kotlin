@@ -17,7 +17,6 @@ package com.brokechef.recipesharingapp.api
 
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
 import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSave200Response
-import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSaveRequest
 
 import org.openapitools.client.infrastructure.*
 import io.ktor.client.HttpClientConfig
@@ -36,7 +35,7 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * GET /savedRecipes/isSaved
+        * GET /savedRecipes/{id}
         * Check if the use has the recipe saved
         * 
          * @param id  
@@ -51,13 +50,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/savedRecipes/isSaved",
+            "/savedRecipes/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -71,18 +69,19 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * POST /savedRecipes/create
+        * POST /savedRecipes/{id}
         * Create a saved recipe record in database
         * 
-         * @param savedRecipesSaveRequest  
+         * @param id  
          * @return SavedRecipesSave200Response
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun savedRecipesSave(savedRecipesSaveRequest: SavedRecipesSaveRequest): HttpResponse<SavedRecipesSave200Response> {
+        open suspend fun savedRecipesSave(id: kotlin.Int): HttpResponse<SavedRecipesSave200Response> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
-            val localVariableBody = savedRecipesSaveRequest
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
 
@@ -90,13 +89,13 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.POST,
-            "/savedRecipes/create",
+            "/savedRecipes/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
             )
 
-            return jsonRequest(
+            return request(
             localVariableConfig,
             localVariableBody,
             localVariableAuthNames
@@ -104,7 +103,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * DELETE /savedRecipes/remove
+        * DELETE /savedRecipes/{id}
         * Remove saved recipe record from database
         * 
          * @param id  
@@ -119,13 +118,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.DELETE,
-            "/savedRecipes/remove",
+            "/savedRecipes/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

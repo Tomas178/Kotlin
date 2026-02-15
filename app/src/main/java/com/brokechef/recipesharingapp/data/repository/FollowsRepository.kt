@@ -3,7 +3,6 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.api.FollowsApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
-import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollowRequest
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -33,9 +32,9 @@ class FollowsRepository(
             }
         })
 
-    suspend fun follow(input: FollowsFollowRequest): FollowsFollow200Response? {
+    suspend fun follow(id: String): FollowsFollow200Response? {
         try {
-            val result = api.followsFollow(input)
+            val result = api.followsFollow(id)
 
             if (result.response.status.isSuccess()) {
                 return result.body()

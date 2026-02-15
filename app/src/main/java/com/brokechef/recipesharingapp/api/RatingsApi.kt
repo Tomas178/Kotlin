@@ -36,7 +36,7 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * GET /ratings/getUserRatingForRecipe
+        * GET /ratings/{id}
         * Get user rating for the recipe
         * 
          * @param id  
@@ -51,13 +51,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/ratings/getUserRatingForRecipe",
+            "/ratings/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -104,7 +103,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * DELETE /ratings/remove
+        * DELETE /ratings/{id}
         * Remove rating for recipe
         * 
          * @param id  
@@ -119,13 +118,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.DELETE,
-            "/ratings/remove",
+            "/ratings/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

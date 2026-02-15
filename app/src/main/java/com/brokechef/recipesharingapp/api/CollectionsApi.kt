@@ -71,7 +71,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /collections/findById
+        * GET /collections/findById/{id}
         * Find collection by ID
         * 
          * @param id  
@@ -86,13 +86,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/collections/findById",
+            "/collections/findById/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -141,7 +140,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * GET /collections/findRecipesByCollectionId
+        * GET /collections/findRecipesByCollectionId/{id}
         * Find all recipes in the collection
         * 
          * @param id  
@@ -156,13 +155,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.GET,
-            "/collections/findRecipesByCollectionId",
+            "/collections/findRecipesByCollectionId/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -176,7 +174,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * DELETE /collections/remove
+        * DELETE /collections/{id}
         * Deletes the collection
         * 
          * @param id  
@@ -191,13 +189,12 @@ import io.ktor.http.ParametersBuilder
                     io.ktor.client.utils.EmptyContent
 
             val localVariableQuery = mutableMapOf<String, List<String>>()
-            id?.apply { localVariableQuery["id"] = listOf("$id") }
 
             val localVariableHeaders = mutableMapOf<String, String>()
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.DELETE,
-            "/collections/remove",
+            "/collections/{id}".replace("{" + "id" + "}", "$id"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,

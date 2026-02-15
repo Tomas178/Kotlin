@@ -3,7 +3,6 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.api.CookedRecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.CookedRecipesMark200Response
-import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSaveRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -32,9 +31,9 @@ class CookedRecipesRepository(
             }
         })
 
-    suspend fun mark(input: SavedRecipesSaveRequest): CookedRecipesMark200Response? {
+    suspend fun mark(id: Int): CookedRecipesMark200Response? {
         try {
-            val result = api.cookedRecipesMark(input)
+            val result = api.cookedRecipesMark(id)
 
             if (result.response.status.isSuccess()) {
                 return result.body()

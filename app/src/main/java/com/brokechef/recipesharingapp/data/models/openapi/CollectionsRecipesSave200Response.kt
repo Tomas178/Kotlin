@@ -38,7 +38,7 @@ data class CollectionsRecipesSave200Response (
     val recipeId: kotlin.Int,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-15T12:49:58.355Z"
+    val createdAt: kotlin.String = "2026-02-15T15:20:54.922Z"
 
 ) {
 

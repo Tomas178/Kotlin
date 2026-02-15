@@ -32,7 +32,7 @@ fun AppNavGraph(
             arguments = listOf(navArgument("id") { type = NavType.IntType }),
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: 0
-            RecipeScreen(recipeId = id)
+            RecipeScreen(recipeId = id, navController = navController)
         }
         composable(Screen.MyProfile.route) {
             PlaceholderScreen(title = "My Profile")

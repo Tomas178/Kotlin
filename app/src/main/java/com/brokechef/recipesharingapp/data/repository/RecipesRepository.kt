@@ -142,7 +142,9 @@ class RecipesRepository(
 
     suspend fun isAuthor(id: Int): Boolean {
         try {
+            println("isAuthor request for id: $id")
             val result = api.recipesIsAuthor(id)
+            println("isAuthor response status: ${result.response.status}")
 
             if (result.response.status.isSuccess()) {
                 return result.body()
@@ -169,6 +171,22 @@ class RecipesRepository(
         } catch (e: Exception) {
             e.printStackTrace()
             return null
+        }
+    }
+
+    suspend fun remove(id: Int) {
+        try {
+            val result = api.recipesRemove(id)
+
+            if (result.response.status.isSuccess()) {
+                return
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return
         }
     }
 }

@@ -36,7 +36,7 @@ import io.ktor.http.ParametersBuilder
     ) {
 
         /**
-        * POST /collectionsRecipes/create
+        * POST /collectionsRecipes
         * Save a recipe to collection
         * 
          * @param collectionsRecipesSaveRequest  
@@ -55,7 +55,7 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.POST,
-            "/collectionsRecipes/create",
+            "/collectionsRecipes",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
@@ -69,7 +69,7 @@ import io.ktor.http.ParametersBuilder
             }
 
         /**
-        * DELETE /collectionsRecipes/remove
+        * DELETE /collectionsRecipes
         * Remove recipe from collection
         * 
          * @param collectionId  
@@ -92,7 +92,7 @@ import io.ktor.http.ParametersBuilder
 
             val localVariableConfig = RequestConfig<kotlin.Any?>(
             RequestMethod.DELETE,
-            "/collectionsRecipes/remove",
+            "/collectionsRecipes",
             query = localVariableQuery,
             headers = localVariableHeaders,
             requiresAuthentication = true,
