@@ -2,6 +2,8 @@ package com.brokechef.recipesharingapp.data.repository
 
 import com.brokechef.recipesharingapp.api.SavedRecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
+import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSave200Response
+import com.brokechef.recipesharingapp.data.models.openapi.SavedRecipesSaveRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -48,6 +50,38 @@ class SavedRecipesRepository(
         } catch (e: Exception) {
             e.printStackTrace()
             return false
+        }
+    }
+
+    suspend fun save(id: SavedRecipesSaveRequest): SavedRecipesSave200Response? {
+        try {
+            val result = api.savedRecipesSave(id)
+
+            if (result.response.status.isSuccess()) {
+                return result.body()
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return null
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
+
+    suspend fun unsave(id: Int) {
+        try {
+            val result = api.savedRecipesUnsave(id)
+
+            if (result.response.status.isSuccess()) {
+                return
+            } else {
+                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
+                return
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return
         }
     }
 }
