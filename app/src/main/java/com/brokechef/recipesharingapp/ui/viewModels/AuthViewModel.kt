@@ -98,6 +98,7 @@ class AuthViewModel(
                 .signIn(email, password)
                 .onSuccess {
                     tokenManager.saveToken(it.token)
+                    tokenManager.saveUserId(it.user.id)
                     authState = AuthState.Authenticated(it)
                 }.onFailure { errorMessage = it.message }
         }

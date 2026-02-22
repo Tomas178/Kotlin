@@ -16,7 +16,16 @@ class TokenManager(
 
     fun getToken(): String? = prefs.getString("session_token", null)
 
+    fun saveUserId(userId: String) {
+        prefs.edit { putString("user_id", userId) }
+    }
+
+    fun getUserId(): String? = prefs.getString("user_id", null)
+
     fun clearToken() {
-        prefs.edit { remove("session_token") }
+        prefs.edit {
+            remove("session_token")
+            remove("user_id")
+        }
     }
 }
