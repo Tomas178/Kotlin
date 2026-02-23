@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.brokechef.recipesharingapp.data.auth.AuthResponse
 import com.brokechef.recipesharingapp.data.auth.AuthService
 import com.brokechef.recipesharingapp.data.auth.TokenManager
+import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -80,11 +81,16 @@ class AuthViewModel(
         viewModelScope.launch {
             errorMessage = null
             signUpSuccess = false
+            ToastState.loading("Signing up...")
             authService
                 .signUp(name, email, password)
                 .onSuccess {
                     signUpSuccess = true
-                }.onFailure { errorMessage = it.message }
+                    ToastState.success("Account created! Please check your email to verify.")
+                }.onFailure {
+                    errorMessage = it.message
+                    ToastState.error(it.message ?: "Sign up failed.")
+                }
         }
     }
 
@@ -107,9 +113,11 @@ class AuthViewModel(
     fun signOut() {
         viewModelScope.launch {
             val token = tokenManager.getToken() ?: return@launch
+            ToastState.loading("Signing out...")
             authService.signOut(token)
             tokenManager.clearToken()
             authState = AuthState.Unauthenticated
+            ToastState.success("Signed out!")
         }
     }
 
@@ -117,10 +125,16 @@ class AuthViewModel(
         viewModelScope.launch {
             errorMessage = null
             resetPasswordSent = false
+            ToastState.loading("Sending reset link...")
             authService
                 .requestResetPassword(email, "http://localhost:5173/reset-password")
-                .onSuccess { resetPasswordSent = true }
-                .onFailure { errorMessage = it.message }
+                .onSuccess {
+                    resetPasswordSent = true
+                    ToastState.success("Reset link sent! Check your email.")
+                }.onFailure {
+                    errorMessage = it.message
+                    ToastState.error(it.message ?: "Failed to send reset link.")
+                }
         }
     }
 
