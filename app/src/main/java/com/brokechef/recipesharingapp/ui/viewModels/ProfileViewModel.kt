@@ -18,6 +18,7 @@ import com.brokechef.recipesharingapp.data.repository.CollectionsRepository
 import com.brokechef.recipesharingapp.data.repository.FollowsRepository
 import com.brokechef.recipesharingapp.data.repository.UploadsRepository
 import com.brokechef.recipesharingapp.data.repository.UsersRepository
+import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import kotlinx.coroutines.launch
 
 sealed interface ProfileUiState {
@@ -334,6 +335,7 @@ class ProfileViewModel(
         showCreateCollectionDialog = false
         viewModelScope.launch {
             try {
+                ToastState.loading("Creating collection...")
                 var imageUrl: String? = null
                 if (imageBytes != null) {
                     imageUrl = uploadsRepository.uploadCollectionImage(imageBytes).getOrThrow()
@@ -344,9 +346,13 @@ class ProfileViewModel(
                     )
                 if (created != null) {
                     fetchCollections()
+                    ToastState.success("Collection created!")
+                } else {
+                    ToastState.error("Failed to create collection.")
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to create collection.")
             }
         }
     }
