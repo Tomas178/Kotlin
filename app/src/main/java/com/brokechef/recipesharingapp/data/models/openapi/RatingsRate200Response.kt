@@ -42,7 +42,7 @@ data class RatingsRate200Response (
     val rating: kotlin.Int,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-15T15:20:54.922Z"
+    val createdAt: kotlin.String = "2026-02-23T20:35:14.675Z"
 
 ) {
 
