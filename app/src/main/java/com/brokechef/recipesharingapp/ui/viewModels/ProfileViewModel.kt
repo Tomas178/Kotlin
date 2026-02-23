@@ -16,6 +16,7 @@ import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Respon
 import com.brokechef.recipesharingapp.data.repository.CollectionsRecipesRepository
 import com.brokechef.recipesharingapp.data.repository.CollectionsRepository
 import com.brokechef.recipesharingapp.data.repository.FollowsRepository
+import com.brokechef.recipesharingapp.data.repository.UploadsRepository
 import com.brokechef.recipesharingapp.data.repository.UsersRepository
 import kotlinx.coroutines.launch
 
@@ -39,6 +40,8 @@ class ProfileViewModel(
     private val followsRepository = FollowsRepository(tokenManager)
     private val collectionsRepository = CollectionsRepository(tokenManager)
     private val collectionsRecipesRepository = CollectionsRecipesRepository(tokenManager)
+
+    private val uploadsRepository = UploadsRepository(tokenManager)
 
     var profileUiState: ProfileUiState by mutableStateOf(ProfileUiState.Loading)
         private set
@@ -324,11 +327,21 @@ class ProfileViewModel(
         showCreateCollectionDialog = false
     }
 
-    fun createCollection(title: String) {
+    fun createCollection(
+        title: String,
+        imageBytes: ByteArray? = null,
+    ) {
         showCreateCollectionDialog = false
         viewModelScope.launch {
             try {
-                val created = collectionsRepository.create(CollectionsCreateRequest(title = title))
+                var imageUrl: String? = null
+                if (imageBytes != null) {
+                    imageUrl = uploadsRepository.uploadCollectionImage(imageBytes).getOrThrow()
+                }
+                val created =
+                    collectionsRepository.create(
+                        CollectionsCreateRequest(title = title, imageUrl = imageUrl),
+                    )
                 if (created != null) {
                     fetchCollections()
                 }
