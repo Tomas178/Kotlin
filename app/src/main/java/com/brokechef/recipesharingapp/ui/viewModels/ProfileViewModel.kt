@@ -1,7 +1,6 @@
 package com.brokechef.recipesharingapp.ui.viewModels
 
 import android.app.Application
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,7 +13,6 @@ import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreateReque
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
-import com.brokechef.recipesharingapp.data.models.openapi.UsersGetRecipes200Response
 import com.brokechef.recipesharingapp.data.repository.CollectionsRecipesRepository
 import com.brokechef.recipesharingapp.data.repository.CollectionsRepository
 import com.brokechef.recipesharingapp.data.repository.FollowsRepository
@@ -57,16 +55,48 @@ class ProfileViewModel(
     var totalFollowing by mutableIntStateOf(0)
         private set
 
-    var savedRecipes by mutableStateOf<List<RecipesFindAll200ResponseInner>>(emptyList())
-        private set
+    suspend fun loadSavedRecipes(
+        userId: String?,
+        offset: Int,
+        limit: Int,
+    ): List<RecipesFindAll200ResponseInner> =
+        try {
+            val result = usersRepository.getRecipes(offset = offset, limit = limit, id = userId)
+            result.saved
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
 
-    var createdRecipes by mutableStateOf<List<RecipesFindAll200ResponseInner>>(emptyList())
-        private set
+    suspend fun loadCreatedRecipes(
+        userId: String?,
+        offset: Int,
+        limit: Int,
+    ): List<RecipesFindAll200ResponseInner> =
+        try {
+            val result = usersRepository.getRecipes(offset = offset, limit = limit, id = userId)
+            result.created
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
 
-    var isLoadingRecipes by mutableStateOf(false)
-        private set
+    suspend fun loadTotalSaved(userId: String?): Int =
+        try {
+            usersRepository.totalSaved(userId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
 
-    // Follow modal state
+    suspend fun loadTotalCreated(userId: String?): Int =
+        try {
+            usersRepository.totalCreated(userId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            0
+        }
+
     var showFollowModal by mutableStateOf(false)
         private set
 
@@ -136,28 +166,12 @@ class ProfileViewModel(
                         isFollowing = followsRepository.isFollowing(user.id)
                     }
                 }
-                launch {
-                    loadRecipes(user.id)
-                }
             } catch (e: Exception) {
                 profileUiState =
                     ProfileUiState.Error(
                         e.message ?: "Failed to load profile. Check your connection.",
                     )
             }
-        }
-    }
-
-    private suspend fun loadRecipes(userId: String?) {
-        isLoadingRecipes = true
-        try {
-            val result = usersRepository.getRecipes(offset = null, limit = null, id = userId)
-            savedRecipes = result.saved
-            createdRecipes = result.created
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            isLoadingRecipes = false
         }
     }
 

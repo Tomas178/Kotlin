@@ -41,3 +41,5 @@ val SubmitText = Color(0xFF556987)
 val SubmitTextDark = Color(0xFF463B45)
 
 val ErrorRed = Color(0xFFEF4444)
+
+val DeleteRed = Color(0xFFEF4444)

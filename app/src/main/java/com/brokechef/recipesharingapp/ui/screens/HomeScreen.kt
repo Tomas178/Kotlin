@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.brokechef.recipesharingapp.ui.components.RecipesList
 import com.brokechef.recipesharingapp.ui.components.SearchBar
 import com.brokechef.recipesharingapp.ui.components.SortDropdownMenu
+import com.brokechef.recipesharingapp.ui.components.recipesLists.RecipesListColumn
 import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
 import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
 import com.brokechef.recipesharingapp.ui.navigation.navigateToRecipe
@@ -72,7 +72,7 @@ fun HomeScreen(
                     )
                 }
 
-                RecipesList(
+                RecipesListColumn(
                     recipes = homeUiState.recipes,
                     hasMore = viewModel.hasMore,
                     isLoadingMore = viewModel.isLoadingMore,

@@ -1,4 +1,4 @@
-package com.brokechef.recipesharingapp.ui.components
+package com.brokechef.recipesharingapp.ui.components.recipesLists
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import com.brokechef.recipesharingapp.ui.components.RecipeCard
 import com.brokechef.recipesharingapp.ui.components.buttons.LoadMoreButton
 
 @Composable
-fun RecipesList(
+fun RecipesListColumn(
     recipes: List<RecipesFindAll200ResponseInner>,
     hasMore: Boolean,
     isLoadingMore: Boolean,
