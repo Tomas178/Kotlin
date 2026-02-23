@@ -18,7 +18,7 @@ sealed class Screen(
         fun createRoute(id: Int) = "recipe/$id"
     }
 
-    object MyProfile : Screen("profile", "My Profile")
+    object MyProfile : Screen("my-profile", "My Profile")
 
     object UserProfile : Screen("profile/{id}", "User Profile") {
         fun createRoute(id: String) = "profile/$id"
