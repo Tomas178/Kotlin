@@ -57,6 +57,24 @@ data class AuthErrorResponse(
     val code: String? = null,
 )
 
+@Serializable
+data class SessionResponse(
+    val session: SessionData,
+    val user: AuthUser,
+)
+
+@Serializable
+data class SessionData(
+    val id: String,
+    val token: String,
+    val userId: String,
+    val expiresAt: String? = null,
+    val createdAt: String? = null,
+    val updatedAt: String? = null,
+    val ipAddress: String? = null,
+    val userAgent: String? = null,
+)
+
 private val lenientJson = Json { ignoreUnknownKeys = true }
 
 class AuthService(
@@ -114,10 +132,12 @@ class AuthService(
                         response.headers
                             .getAll("Set-Cookie")
                             ?.firstOrNull { it.startsWith("better-auth.session_token=") }
+
                     val signedToken =
                         setCookie
                             ?.substringAfter("better-auth.session_token=")
                             ?.substringBefore(";")
+                            ?.let { java.net.URLDecoder.decode(it, "UTF-8") }
 
                     Result.success(authResponse.copy(token = signedToken ?: authResponse.token))
                 } catch (e: Exception) {
@@ -149,7 +169,13 @@ class AuthService(
             val body = response.bodyAsText()
             if (response.status == HttpStatusCode.OK) {
                 try {
-                    Result.success(lenientJson.decodeFromString<AuthResponse>(body))
+                    val session = lenientJson.decodeFromString<SessionResponse>(body)
+                    Result.success(
+                        AuthResponse(
+                            token = session.session.token,
+                            user = session.user,
+                        ),
+                    )
                 } catch (e: Exception) {
                     Result.failure(Exception("Session invalid"))
                 }
