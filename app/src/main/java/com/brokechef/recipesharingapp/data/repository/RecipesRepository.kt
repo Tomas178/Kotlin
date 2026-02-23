@@ -1,5 +1,6 @@
 package com.brokechef.recipesharingapp.data.repository
 
+import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.api.RecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
@@ -17,9 +18,10 @@ import kotlinx.serialization.json.Json
 
 class RecipesRepository(
     private val tokenManager: TokenManager,
+    private val baseUrl: String = Config.Urls.BASE_CRUD_URL,
 ) {
     private val api =
-        RecipesApi(baseUrl = "http://10.0.2.2:3000/api/v1/rest", httpClientConfig = {
+        RecipesApi(baseUrl = baseUrl, httpClientConfig = {
             it.install(ContentNegotiation) {
                 json(
                     Json {

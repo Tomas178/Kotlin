@@ -1,5 +1,6 @@
 package com.brokechef.recipesharingapp.data.repository
 
+import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.api.FollowsApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
@@ -13,9 +14,10 @@ import kotlinx.serialization.json.Json
 
 class FollowsRepository(
     private val tokenManager: TokenManager,
+    private val baseUrl: String = Config.Urls.BASE_CRUD_URL,
 ) {
     private val api =
-        FollowsApi(baseUrl = "http://10.0.2.2:3000/api/v1/rest", httpClientConfig = {
+        FollowsApi(baseUrl = baseUrl, httpClientConfig = {
             it.install(ContentNegotiation) {
                 json(
                     Json {

@@ -37,7 +37,7 @@ class AuthViewModel(
             }
         }
 
-    private val authService = AuthService(client, "http://10.0.2.2:3000")
+    private val authService = AuthService(client)
 
     var authState by mutableStateOf<AuthState>(AuthState.Loading)
         private set

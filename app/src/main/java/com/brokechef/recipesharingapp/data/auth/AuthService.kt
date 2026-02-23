@@ -1,5 +1,6 @@
 package com.brokechef.recipesharingapp.data.auth
 
+import com.brokechef.recipesharingapp.Config
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -60,7 +61,7 @@ private val lenientJson = Json { ignoreUnknownKeys = true }
 
 class AuthService(
     private val client: HttpClient,
-    private val baseUrl: String,
+    private val baseUrl: String = Config.Urls.BASE_BETTER_AUTH_URL,
 ) {
     private fun parseError(
         responseBody: String,
@@ -80,7 +81,7 @@ class AuthService(
     ): Result<Unit> =
         try {
             val response =
-                client.post("$baseUrl/api/auth/sign-up/email") {
+                client.post("$baseUrl/sign-up/email") {
                     contentType(ContentType.Application.Json)
                     setBody(SignUpRequest(name, email, password))
                 }
@@ -100,7 +101,7 @@ class AuthService(
     ): Result<AuthResponse> =
         try {
             val response =
-                client.post("$baseUrl/api/auth/sign-in/email") {
+                client.post("$baseUrl/sign-in/email") {
                     contentType(ContentType.Application.Json)
                     setBody(SignInRequest(email, password))
                 }
@@ -131,7 +132,7 @@ class AuthService(
 
     suspend fun signOut(token: String): Result<Unit> =
         try {
-            client.post("$baseUrl/api/auth/sign-out") {
+            client.post("$baseUrl/sign-out") {
                 header("Cookie", "better-auth.session_token=$token")
             }
             Result.success(Unit)
@@ -142,7 +143,7 @@ class AuthService(
     suspend fun getSession(token: String): Result<AuthResponse> =
         try {
             val response =
-                client.get("$baseUrl/api/auth/get-session") {
+                client.get("$baseUrl/get-session") {
                     header("Cookie", "better-auth.session_token=$token")
                 }
             val body = response.bodyAsText()
@@ -165,7 +166,7 @@ class AuthService(
     ): Result<Unit> =
         try {
             val response =
-                client.post("$baseUrl/api/auth/forget-password") {
+                client.post("$baseUrl/forget-password") {
                     contentType(ContentType.Application.Json)
                     setBody(RequestResetPasswordRequest(email, redirectTo))
                 }
@@ -179,5 +180,5 @@ class AuthService(
             Result.failure(e)
         }
 
-    fun getSocialLoginUrl(provider: String): String = "$baseUrl/api/auth/sign-in/social?provider=$provider"
+    fun getSocialLoginUrl(provider: String): String = "$baseUrl/sign-in/social?provider=$provider"
 }
