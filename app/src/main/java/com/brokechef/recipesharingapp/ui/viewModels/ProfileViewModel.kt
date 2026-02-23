@@ -149,10 +149,6 @@ class ProfileViewModel(
         viewModelScope.launch {
             try {
                 val user = usersRepository.findById(userId)
-                if (user == null) {
-                    profileUiState = ProfileUiState.Error("User not found.")
-                    return@launch
-                }
 
                 profileUiState = ProfileUiState.Success(user)
 
@@ -184,11 +180,14 @@ class ProfileViewModel(
         if (state !is ProfileUiState.Success) return
         viewModelScope.launch {
             try {
+                ToastState.loading("Following...")
                 followsRepository.follow(state.user.id)
                 isFollowing = true
                 totalFollowers += 1
+                ToastState.success("User followed!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to follow user.")
             }
         }
     }
@@ -198,11 +197,14 @@ class ProfileViewModel(
         if (state !is ProfileUiState.Success) return
         viewModelScope.launch {
             try {
+                ToastState.loading("Unfollowing...")
                 followsRepository.unfollow(state.user.id)
                 isFollowing = false
                 totalFollowers -= 1
+                ToastState.success("User unfollowed!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to unfollow user.")
             }
         }
     }
@@ -227,6 +229,7 @@ class ProfileViewModel(
             } catch (e: Exception) {
                 e.printStackTrace()
                 followModalUsers = emptyList()
+                ToastState.error(e.message ?: "Failed to load users.")
             } finally {
                 isLoadingFollowModalUsers = false
             }
@@ -256,6 +259,7 @@ class ProfileViewModel(
                 collections = collectionsRepository.findByUserId(null)
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to load collections.")
             } finally {
                 isLoadingCollections = false
             }
@@ -270,6 +274,7 @@ class ProfileViewModel(
                 collectionRecipes = collectionsRepository.findRecipesByCollectionId(collection.id)
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to load collection recipes.")
             } finally {
                 isLoadingCollectionRecipes = false
             }
@@ -296,10 +301,13 @@ class ProfileViewModel(
         showDeleteCollectionDialog = false
         viewModelScope.launch {
             try {
+                ToastState.loading("Deleting collection...")
                 collectionsRepository.remove(id)
                 collections = collections.filter { it.id != id }
+                ToastState.success("Collection deleted!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to delete collection.")
             }
             collectionIdToDelete = null
         }
@@ -309,13 +317,16 @@ class ProfileViewModel(
         val collection = selectedCollection ?: return
         viewModelScope.launch {
             try {
+                ToastState.loading("Removing recipe from collection...")
                 collectionsRecipesRepository.unsave(
                     collectionId = collection.id,
                     recipeId = recipeId,
                 )
                 collectionRecipes = collectionRecipes.filter { it.id != recipeId }
+                ToastState.success("Removed recipe from collection!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to remove recipe from collection.")
             }
         }
     }
@@ -338,18 +349,14 @@ class ProfileViewModel(
                 ToastState.loading("Creating collection...")
                 var imageUrl: String? = null
                 if (imageBytes != null) {
-                    imageUrl = uploadsRepository.uploadCollectionImage(imageBytes).getOrThrow()
+                    imageUrl = uploadsRepository.uploadCollectionImage(imageBytes)
                 }
-                val created =
-                    collectionsRepository.create(
-                        CollectionsCreateRequest(title = title, imageUrl = imageUrl),
-                    )
-                if (created != null) {
-                    fetchCollections()
-                    ToastState.success("Collection created!")
-                } else {
-                    ToastState.error("Failed to create collection.")
-                }
+
+                collectionsRepository.create(
+                    CollectionsCreateRequest(title = title, imageUrl = imageUrl),
+                )
+                fetchCollections()
+                ToastState.success("Collection created!")
             } catch (e: Exception) {
                 e.printStackTrace()
                 ToastState.error(e.message ?: "Failed to create collection.")

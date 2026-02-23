@@ -5,6 +5,7 @@ import com.brokechef.recipesharingapp.api.FollowsApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
+import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -34,115 +35,58 @@ class FollowsRepository(
             }
         })
 
-    suspend fun follow(id: String): FollowsFollow200Response? {
-        try {
-            val result = api.followsFollow(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return null
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+    suspend fun follow(id: String): FollowsFollow200Response {
+        val result = api.followsFollow(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to follow user.")
     }
 
     suspend fun unfollow(id: String) {
-        try {
-            val result = api.followsUnfollow(id)
-
-            if (result.response.status.isSuccess()) {
-                return
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return
+        val result = api.followsUnfollow(id)
+        if (!result.response.status.isSuccess()) {
+            result.response.throwApiError("Failed to unfollow user.")
         }
     }
 
     suspend fun getFollowers(id: String?): List<UsersFindById200Response> {
-        try {
-            val result = api.followsGetFollowers(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return emptyList()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return emptyList()
+        val result = api.followsGetFollowers(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to load followers.")
     }
 
     suspend fun getFollowing(id: String?): List<UsersFindById200Response> {
-        try {
-            val result = api.followsGetFollowing(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return emptyList()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return emptyList()
+        val result = api.followsGetFollowing(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to load following.")
     }
 
     suspend fun isFollowing(id: String): Boolean {
-        try {
-            val result = api.followsIsFollowing(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return false
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
+        val result = api.followsIsFollowing(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to check follow status.")
     }
 
     suspend fun totalFollowers(id: String?): Int {
-        try {
-            val result = api.followsTotalFollowers(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return 0
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return 0
+        val result = api.followsTotalFollowers(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to load followers count.")
     }
 
     suspend fun totalFollowing(id: String?): Int {
-        try {
-            val result = api.followsTotalFollowing(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return 0
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return 0
+        val result = api.followsTotalFollowing(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to load following count.")
     }
 }

@@ -6,13 +6,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.enums.SortingTypes
-import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.repository.RecipesRepository
+import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import kotlinx.coroutines.launch
 
 sealed interface HomeUiState {
@@ -65,7 +64,11 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
-            totalCount = recipesRepository.getTotalCount()
+            try {
+                totalCount = recipesRepository.getTotalCount()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             loadRecipes()
         }
     }
@@ -91,6 +94,7 @@ class HomeViewModel(
             if (allRecipes.isEmpty()) {
                 homeUiState = HomeUiState.Error
             }
+            ToastState.error(e.message ?: "Failed to load recipes.")
         }
     }
 
@@ -140,7 +144,7 @@ class HomeViewModel(
                 isInSearchMode = true
                 homeUiState = HomeUiState.Success(results)
             } catch (e: Exception) {
-                searchError = "Search failed. Please try again."
+                searchError = e.message ?: "Search failed. Please try again."
             } finally {
                 isSearching = false
             }

@@ -17,6 +17,7 @@ import com.brokechef.recipesharingapp.data.repository.CookedRecipesRepository
 import com.brokechef.recipesharingapp.data.repository.RatingsRepository
 import com.brokechef.recipesharingapp.data.repository.RecipesRepository
 import com.brokechef.recipesharingapp.data.repository.SavedRecipesRepository
+import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import kotlinx.coroutines.launch
 
 sealed interface RecipeUiState {
@@ -68,11 +69,6 @@ class RecipeViewModel(
         viewModelScope.launch {
             try {
                 val recipe = recipesRepository.findById(recipeId)
-                if (recipe == null) {
-                    recipeUiState = RecipeUiState.Error("Recipe not found.")
-                    return@launch
-                }
-
                 recipeUiState = RecipeUiState.Success(recipe)
 
                 launch { checkIsAuthor(recipeId) }
@@ -90,9 +86,7 @@ class RecipeViewModel(
 
     private suspend fun checkIsAuthor(recipeId: Int) {
         try {
-            val result = recipesRepository.isAuthor(recipeId)
-            println("isAuthor check for recipe $recipeId: $result")
-            isAuthor = result
+            isAuthor = recipesRepository.isAuthor(recipeId)
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -125,10 +119,13 @@ class RecipeViewModel(
     fun handleSave() {
         viewModelScope.launch {
             try {
+                ToastState.loading("Saving recipe...")
                 savedRecipesRepository.save(currentRecipeId)
                 isSaved = true
+                ToastState.success("Recipe saved!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to save recipe.")
             }
         }
     }
@@ -136,10 +133,13 @@ class RecipeViewModel(
     fun handleUnsave() {
         viewModelScope.launch {
             try {
+                ToastState.loading("Unsaving recipe...")
                 savedRecipesRepository.unsave(currentRecipeId)
                 isSaved = false
+                ToastState.success("Recipe unsaved!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to unsave recipe.")
             }
         }
     }
@@ -147,10 +147,13 @@ class RecipeViewModel(
     fun handleMarkAsCooked() {
         viewModelScope.launch {
             try {
+                ToastState.loading("Marking as cooked...")
                 cookedRecipesRepository.mark(currentRecipeId)
                 isCooked = true
+                ToastState.success("Marked as cooked!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to mark as cooked.")
             }
         }
     }
@@ -158,10 +161,13 @@ class RecipeViewModel(
     fun handleUnmarkAsCooked() {
         viewModelScope.launch {
             try {
+                ToastState.loading("Unmarking as cooked...")
                 cookedRecipesRepository.unmark(currentRecipeId)
                 isCooked = false
+                ToastState.success("Unmarked as cooked!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to unmark as cooked.")
             }
         }
     }
@@ -173,12 +179,12 @@ class RecipeViewModel(
                     ratingsRepository.rate(
                         RatingsRateRequest(rating = rating, recipeId = currentRecipeId),
                     )
-                if (result != null) {
-                    userRating = rating
-                    updateRecipeRating(result.rating)
-                }
+                userRating = rating
+                updateRecipeRating(result.rating)
+                ToastState.success("Rating submitted!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to rate recipe.")
             }
         }
     }
@@ -190,12 +196,12 @@ class RecipeViewModel(
                     ratingsRepository.update(
                         RatingsRateRequest(rating = rating, recipeId = currentRecipeId),
                     )
-                if (updatedRating != null) {
-                    userRating = rating
-                    updateRecipeRating(updatedRating)
-                }
+                userRating = rating
+                updateRecipeRating(updatedRating)
+                ToastState.success("Rating updated!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to update rating.")
             }
         }
     }
@@ -203,15 +209,15 @@ class RecipeViewModel(
     fun handleRemoveRating() {
         viewModelScope.launch {
             try {
+                ToastState.loading("Removing rating...")
                 ratingsRepository.remove(currentRecipeId)
                 userRating = null
-
                 val recipe = recipesRepository.findById(currentRecipeId)
-                if (recipe != null) {
-                    recipeUiState = RecipeUiState.Success(recipe)
-                }
+                recipeUiState = RecipeUiState.Success(recipe)
+                ToastState.success("Rating removed!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to remove rating.")
             }
         }
     }
@@ -229,10 +235,13 @@ class RecipeViewModel(
     fun handleDelete(onDeleted: () -> Unit) {
         viewModelScope.launch {
             try {
+                ToastState.loading("Deleting recipe...")
                 recipesRepository.remove(currentRecipeId)
+                ToastState.success("Recipe deleted!")
                 onDeleted()
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to delete recipe.")
             }
         }
     }
@@ -243,6 +252,7 @@ class RecipeViewModel(
                 userCollections = collectionsRepository.findByUserId(null)
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to load collections.")
             }
         }
     }
@@ -250,14 +260,17 @@ class RecipeViewModel(
     fun handleSaveToCollection(collectionId: Int) {
         viewModelScope.launch {
             try {
+                ToastState.loading("Saving to collection...")
                 collectionsRecipesRepository.save(
                     CollectionsRecipesSaveRequest(
                         collectionId = collectionId,
                         recipeId = currentRecipeId,
                     ),
                 )
+                ToastState.success("Saved to collection!")
             } catch (e: Exception) {
                 e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to save to collection.")
             }
         }
     }

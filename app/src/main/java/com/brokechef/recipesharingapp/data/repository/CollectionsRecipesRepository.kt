@@ -5,6 +5,7 @@ import com.brokechef.recipesharingapp.api.CollectionsRecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsRecipesSave200Response
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsRecipesSaveRequest
+import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -34,39 +35,21 @@ class CollectionsRecipesRepository(
             }
         })
 
-    suspend fun save(input: CollectionsRecipesSaveRequest): CollectionsRecipesSave200Response? {
-        try {
-            val result = api.collectionsRecipesSave(input)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return null
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+    suspend fun save(input: CollectionsRecipesSaveRequest): CollectionsRecipesSave200Response {
+        val result = api.collectionsRecipesSave(input)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to save recipe to collection.")
     }
 
     suspend fun unsave(
         collectionId: Int,
         recipeId: Int,
     ) {
-        try {
-            val result =
-                api.collectionsRecipesUnsave(collectionId = collectionId, recipeId = recipeId)
-
-            if (result.response.status.isSuccess()) {
-                return
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return
+        val result = api.collectionsRecipesUnsave(collectionId = collectionId, recipeId = recipeId)
+        if (!result.response.status.isSuccess()) {
+            result.response.throwApiError("Failed to remove recipe from collection.")
         }
     }
 }

@@ -2,6 +2,7 @@ package com.brokechef.recipesharingapp.data.repository
 
 import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.data.auth.TokenManager
+import com.brokechef.recipesharingapp.data.repository.utils.ApiErrorResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -14,7 +15,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -44,50 +45,46 @@ class UploadsRepository(
             }
         }
 
-    suspend fun uploadCollectionImage(imageBytes: ByteArray): Result<String> = upload("$baseUrl/collection", imageBytes, "imageUrl")
+    suspend fun uploadCollectionImage(imageBytes: ByteArray): String = upload("$baseUrl/collection", imageBytes, "imageUrl")
 
-    suspend fun uploadRecipeImage(imageBytes: ByteArray): Result<String> = upload("$baseUrl/recipe", imageBytes, "imageUrl")
+    suspend fun uploadRecipeImage(imageBytes: ByteArray): String = upload("$baseUrl/recipe", imageBytes, "imageUrl")
 
-    suspend fun uploadProfileImage(imageBytes: ByteArray): Result<String> = upload("$baseUrl/profile", imageBytes, "image")
+    suspend fun uploadProfileImage(imageBytes: ByteArray): String = upload("$baseUrl/profile", imageBytes, "image")
 
     private suspend fun upload(
         url: String,
         imageBytes: ByteArray,
         responseKey: String,
-    ): Result<String> =
-        try {
-            val response =
-                client.post(url) {
-                    setBody(
-                        MultiPartFormDataContent(
-                            formData {
-                                append(
-                                    "file",
-                                    imageBytes,
-                                    Headers.build {
-                                        append(HttpHeaders.ContentType, "image/jpeg")
-                                        append(
-                                            HttpHeaders.ContentDisposition,
-                                            "filename=\"image.jpg\"",
-                                        )
-                                    },
-                                )
-                            },
-                        ),
-                    )
-                }
-            if (response.status == HttpStatusCode.OK) {
-                val body = lenientJson.decodeFromString<ImageUploadResponse>(response.bodyAsText())
-                val key = if (responseKey == "image") body.image else body.imageUrl
-                if (key != null) {
-                    Result.success(key)
-                } else {
-                    Result.failure(Exception("Upload succeeded but no image key returned"))
-                }
-            } else {
-                Result.failure(Exception("Upload failed: ${response.status}"))
+    ): String {
+        val response =
+            client.post(url) {
+                setBody(
+                    MultiPartFormDataContent(
+                        formData {
+                            append(
+                                "file",
+                                imageBytes,
+                                Headers.build {
+                                    append(HttpHeaders.ContentType, "image/jpeg")
+                                    append(HttpHeaders.ContentDisposition, "filename=\"image.jpg\"")
+                                },
+                            )
+                        },
+                    ),
+                )
             }
-        } catch (e: Exception) {
-            Result.failure(e)
+        if (!response.status.isSuccess()) {
+            val body = response.bodyAsText()
+            val message =
+                try {
+                    lenientJson.decodeFromString<ApiErrorResponse>(body).message ?: "Upload failed."
+                } catch (e: Exception) {
+                    "Upload failed: ${response.status}"
+                }
+            throw Exception(message)
         }
+        val body = lenientJson.decodeFromString<ImageUploadResponse>(response.bodyAsText())
+        val key = if (responseKey == "image") body.image else body.imageUrl
+        return key ?: throw Exception("Upload succeeded but no image key returned.")
+    }
 }

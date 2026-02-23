@@ -4,6 +4,7 @@ import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.api.CookedRecipesApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.CookedRecipesMark200Response
+import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
@@ -33,51 +34,26 @@ class CookedRecipesRepository(
             }
         })
 
-    suspend fun mark(id: Int): CookedRecipesMark200Response? {
-        try {
-            val result = api.cookedRecipesMark(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return null
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+    suspend fun mark(id: Int): CookedRecipesMark200Response {
+        val result = api.cookedRecipesMark(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to mark recipe as cooked.")
     }
 
     suspend fun unmark(id: Int) {
-        try {
-            val result = api.cookedRecipesUnmark(id)
-
-            if (result.response.status.isSuccess()) {
-                return
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return
+        val result = api.cookedRecipesUnmark(id)
+        if (!result.response.status.isSuccess()) {
+            result.response.throwApiError("Failed to unmark recipe.")
         }
     }
 
     suspend fun isMarked(id: Int): Boolean {
-        try {
-            val result = api.cookedRecipesIsMarked(id)
-
-            if (result.response.status.isSuccess()) {
-                return result.body()
-            } else {
-                println("API Error: ${result.response.status.value} - ${result.response.status.description}")
-                return false
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
+        val result = api.cookedRecipesIsMarked(id)
+        if (result.response.status.isSuccess()) {
+            return result.body()
         }
+        result.response.throwApiError("Failed to check cooked status.")
     }
 }
