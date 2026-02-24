@@ -80,12 +80,7 @@ fun ProfileInfoSection(
                 }
             }
 
-            if (isOwnProfile) {
-                ProfileActionButton(
-                    text = "Change Credentials",
-                    onClick = { onNavigateToEditProfile(user.id) },
-                )
-            } else {
+            if (!isOwnProfile) {
                 ProfileActionButton(
                     text = if (isFollowing) "Unfollow" else "Follow",
                     onClick = if (isFollowing) onUnfollow else onFollow,
@@ -102,7 +97,7 @@ private fun ProfileActionButton(
 ) {
     OutlinedButton(
         onClick = onClick,
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         colors =
             ButtonDefaults.outlinedButtonColors(
                 contentColor = PrimaryGreen,
@@ -111,7 +106,7 @@ private fun ProfileActionButton(
         Text(
             text = text,
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
         )
     }
 }

@@ -45,11 +45,6 @@ fun CollectionButtons(
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryGreen),
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-            )
             Spacer(modifier = Modifier.width(4.dp))
             Text("Create Collection", fontWeight = FontWeight.Bold)
         }

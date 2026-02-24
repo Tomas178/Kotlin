@@ -30,6 +30,7 @@ fun GradientButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    fillWidth: Boolean = true,
 ) {
     val isDark = isSystemInDarkTheme()
     val gradientColors =
@@ -44,12 +45,12 @@ fun GradientButton(
         contentAlignment = Alignment.Center,
         modifier =
             modifier
-                .fillMaxWidth()
+                .then(if (fillWidth) Modifier.fillMaxWidth() else Modifier)
                 .clip(RoundedCornerShape(50))
                 .background(
                     Brush.horizontalGradient(colors = gradientColors),
                 ).clickable { onClick() }
-                .padding(vertical = 16.dp),
+                .padding(vertical = 16.dp, horizontal = 24.dp),
     ) {
         Text(
             text = text,
