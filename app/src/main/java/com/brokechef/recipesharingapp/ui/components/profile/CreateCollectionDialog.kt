@@ -1,23 +1,25 @@
 package com.brokechef.recipesharingapp.ui.components.profile
 
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,6 +36,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.brokechef.recipesharingapp.ui.components.imagepicker.CameraPermissionDialog
+import com.brokechef.recipesharingapp.ui.components.imagepicker.rememberImagePickerState
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 
 @Composable
@@ -45,10 +49,9 @@ fun CreateCollectionDialog(
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
 
-    val imagePicker =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent(),
-        ) { uri -> imageUri = uri }
+    val pickerState = rememberImagePickerState(onImagePicked = { imageUri = it })
+
+    CameraPermissionDialog(state = pickerState)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -72,7 +75,7 @@ fun CreateCollectionDialog(
                             .height(140.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .border(1.dp, PrimaryGreen.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-                            .clickable { imagePicker.launch("image/*") },
+                            .clickable { pickerState.openGallery() },
                     contentAlignment = Alignment.Center,
                 ) {
                     if (imageUri != null) {
@@ -86,12 +89,25 @@ fun CreateCollectionDialog(
                             contentScale = ContentScale.Crop,
                         )
                     } else {
-                        Icon(
-                            imageVector = Icons.Default.Notifications,
-                            contentDescription = "Add image",
-                            modifier = Modifier.size(40.dp),
-                            tint = PrimaryGreen.copy(alpha = 0.6f),
-                        )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            IconButton(onClick = pickerState::openGallery) {
+                                Icon(
+                                    imageVector = Icons.Default.Image,
+                                    contentDescription = "Choose from gallery",
+                                    modifier = Modifier.size(32.dp),
+                                    tint = PrimaryGreen.copy(alpha = 0.6f),
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            IconButton(onClick = pickerState::openCamera) {
+                                Icon(
+                                    imageVector = Icons.Default.CameraAlt,
+                                    contentDescription = "Take a photo",
+                                    modifier = Modifier.size(32.dp),
+                                    tint = PrimaryGreen.copy(alpha = 0.6f),
+                                )
+                            }
+                        }
                     }
                 }
             }
