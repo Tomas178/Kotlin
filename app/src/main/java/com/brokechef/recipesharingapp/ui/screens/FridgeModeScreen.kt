@@ -32,7 +32,6 @@ import com.brokechef.recipesharingapp.ui.viewModels.FridgeModeViewModel
 
 @Composable
 fun FridgeModeScreen(
-    userId: String,
     navController: NavHostController,
     modifier: Modifier = Modifier,
     viewModel: FridgeModeViewModel = viewModel(),
@@ -55,7 +54,7 @@ fun FridgeModeScreen(
             val isGenerating = viewModel.uiState is FridgeModeUiState.Generating
 
             Button(
-                onClick = { viewModel.generateRecipes(userId) },
+                onClick = { viewModel.generateRecipes() },
                 enabled = !isGenerating && viewModel.selectedImageUri != null,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),

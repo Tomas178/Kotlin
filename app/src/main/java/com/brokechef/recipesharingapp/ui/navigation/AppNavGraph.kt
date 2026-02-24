@@ -2,13 +2,11 @@ package com.brokechef.recipesharingapp.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.ui.screens.CreateRecipeScreen
 import com.brokechef.recipesharingapp.ui.screens.FridgeModeScreen
 import com.brokechef.recipesharingapp.ui.screens.HomeScreen
@@ -49,10 +47,7 @@ fun AppNavGraph(
             ProfileScreen(userId = id, navController = navController)
         }
         composable(Screen.FridgeMode.route) {
-            val context = LocalContext.current
-            val userId = TokenManager(context).getUserId() ?: ""
             FridgeModeScreen(
-                userId = userId,
                 navController = navController,
             )
         }

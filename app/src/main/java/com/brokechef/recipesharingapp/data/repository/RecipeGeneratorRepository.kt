@@ -110,10 +110,10 @@ class RecipeGeneratorRepository(
         }
     }
 
-    fun listenForGeneratedRecipes(userId: String): Flow<RecipeSSEData> =
+    fun listenForGeneratedRecipes(): Flow<RecipeSSEData> =
         flow {
             coroutineScope {
-                val sseUrl = "$baseUrl/events/$userId"
+                val sseUrl = "$baseUrl/events"
                 var connection: HttpURLConnection? = null
                 var reader: BufferedReader? = null
 

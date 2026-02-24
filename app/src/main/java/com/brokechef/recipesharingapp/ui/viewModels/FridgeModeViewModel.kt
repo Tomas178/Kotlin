@@ -57,7 +57,7 @@ class FridgeModeViewModel(
         }
     }
 
-    fun generateRecipes(userId: String) {
+    fun generateRecipes() {
         val imageUri = selectedImageUri
         if (imageUri == null) {
             ToastState.error("Please select a fridge image first.")
@@ -89,7 +89,7 @@ class FridgeModeViewModel(
         sseJob =
             viewModelScope.launch {
                 try {
-                    recipeGeneratorRepository.listenForGeneratedRecipes(userId).collect { sseData ->
+                    recipeGeneratorRepository.listenForGeneratedRecipes().collect { sseData ->
                         when (sseData.status) {
                             RecipeGenerationStatus.SUCCESS -> {
                                 uiState = FridgeModeUiState.Success(sseData.recipes)
