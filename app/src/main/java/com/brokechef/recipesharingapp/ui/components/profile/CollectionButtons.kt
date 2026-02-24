@@ -34,7 +34,7 @@ fun CollectionButtons(
     ) {
         OutlinedButton(
             onClick = onOpenCollectionsModal,
-            shape = RoundedCornerShape(24.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = PrimaryGreen),
         ) {
             Text("View Collections", fontWeight = FontWeight.Bold)

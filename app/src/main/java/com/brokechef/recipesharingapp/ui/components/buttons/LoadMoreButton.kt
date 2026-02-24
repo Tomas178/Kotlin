@@ -35,7 +35,7 @@ fun LoadMoreButton(
         Button(
             onClick = onClick,
             enabled = !isLoading,
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(12.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = PrimaryGreen,
