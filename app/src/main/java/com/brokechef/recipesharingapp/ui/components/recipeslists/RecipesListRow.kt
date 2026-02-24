@@ -1,4 +1,4 @@
-package com.brokechef.recipesharingapp.ui.components.recipesLists
+package com.brokechef.recipesharingapp.ui.components.recipeslists
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

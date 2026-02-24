@@ -16,9 +16,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.brokechef.recipesharingapp.ui.components.SearchBar
 import com.brokechef.recipesharingapp.ui.components.SortDropdownMenu
-import com.brokechef.recipesharingapp.ui.components.recipesLists.RecipesListColumn
-import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
-import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
+import com.brokechef.recipesharingapp.ui.components.recipeslists.RecipesListColumn
+import com.brokechef.recipesharingapp.ui.components.statescreens.ErrorScreen
+import com.brokechef.recipesharingapp.ui.components.statescreens.LoadingScreen
 import com.brokechef.recipesharingapp.ui.navigation.navigateToRecipe
 import com.brokechef.recipesharingapp.ui.viewModels.HomeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.HomeViewModel

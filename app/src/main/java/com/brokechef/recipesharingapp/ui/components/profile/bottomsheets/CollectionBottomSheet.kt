@@ -1,4 +1,4 @@
-package com.brokechef.recipesharingapp.ui.components.profile.bottomSheets
+package com.brokechef.recipesharingapp.ui.components.profile.bottomsheets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

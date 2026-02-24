@@ -32,8 +32,8 @@ import com.brokechef.recipesharingapp.ui.components.recipe.RecipeHeader
 import com.brokechef.recipesharingapp.ui.components.recipe.RecipeImage
 import com.brokechef.recipesharingapp.ui.components.recipe.RecipeStepCard
 import com.brokechef.recipesharingapp.ui.components.recipe.StarRating
-import com.brokechef.recipesharingapp.ui.components.stateScreens.ErrorScreen
-import com.brokechef.recipesharingapp.ui.components.stateScreens.LoadingScreen
+import com.brokechef.recipesharingapp.ui.components.statescreens.ErrorScreen
+import com.brokechef.recipesharingapp.ui.components.statescreens.LoadingScreen
 import com.brokechef.recipesharingapp.ui.navigation.navigateToHome
 import com.brokechef.recipesharingapp.ui.navigation.navigateToUserProfile
 import com.brokechef.recipesharingapp.ui.viewModels.RecipeUiState

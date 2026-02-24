@@ -1,4 +1,4 @@
-package com.brokechef.recipesharingapp.ui.components.recipesLists
+package com.brokechef.recipesharingapp.ui.components.recipeslists
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
