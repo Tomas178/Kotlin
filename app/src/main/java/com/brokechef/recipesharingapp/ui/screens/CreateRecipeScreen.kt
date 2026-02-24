@@ -1,5 +1,6 @@
 package com.brokechef.recipesharingapp.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -48,7 +50,13 @@ import com.brokechef.recipesharingapp.ui.theme.BackgroundRecipeCardDark
 import com.brokechef.recipesharingapp.ui.theme.ErrorRed
 import com.brokechef.recipesharingapp.ui.theme.HeaderLight
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
+import com.brokechef.recipesharingapp.ui.theme.PrimaryGreenDark
+import com.brokechef.recipesharingapp.ui.theme.SecondaryGreen
+import com.brokechef.recipesharingapp.ui.theme.SecondaryGreenDark
 import com.brokechef.recipesharingapp.ui.theme.SubmitText
+import com.brokechef.recipesharingapp.ui.theme.SubmitTextDark
+import com.brokechef.recipesharingapp.ui.theme.TertiaryGreen
+import com.brokechef.recipesharingapp.ui.theme.TertiaryGreenDark
 import com.brokechef.recipesharingapp.ui.viewModels.CreateRecipeUiState
 import com.brokechef.recipesharingapp.ui.viewModels.CreateRecipeViewModel
 
@@ -95,26 +103,50 @@ fun CreateRecipeScreen(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.CenterEnd,
         ) {
-            GradientButton(
-                text = if (isSubmitting) "Publishing..." else "Publish Recipe",
-                onClick = {
-                    if (!isSubmitting) {
+            if (isSubmitting) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(50))
+                            .background(
+                                Brush.horizontalGradient(
+                                    colors =
+                                        if (isDark) {
+                                            listOf(
+                                                PrimaryGreenDark,
+                                                SecondaryGreenDark,
+                                                TertiaryGreenDark,
+                                            )
+                                        } else {
+                                            listOf(PrimaryGreen, SecondaryGreen, TertiaryGreen)
+                                        },
+                                ),
+                            ).padding(vertical = 16.dp, horizontal = 24.dp),
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = if (isDark) SubmitTextDark else SubmitText,
+                        strokeWidth = 2.dp,
+                    )
+                    Text(
+                        text = "Publishing...",
+                        color = if (isDark) SubmitTextDark else SubmitText,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            } else {
+                GradientButton(
+                    text = "Publish Recipe",
+                    onClick = {
                         viewModel.handleCreateRecipe { newRecipeId ->
                             navController.navigateToRecipe(newRecipeId)
                         }
-                    }
-                },
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                fillWidth = false,
-            )
-        }
-
-        if (isSubmitting) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator(color = PrimaryGreen)
+                    },
+                    fillWidth = false,
+                )
             }
         }
 
@@ -153,7 +185,6 @@ fun CreateRecipeScreen(
                     label = { Text("Recipe title") },
                     placeholder = { Text("eg: Savory Stuffed Bell Peppers") },
                     singleLine = true,
-                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth(),
                 )
 
@@ -165,7 +196,6 @@ fun CreateRecipeScreen(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     suffix = { Text("minutes") },
-                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
