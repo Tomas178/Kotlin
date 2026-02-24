@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.volley)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.navigation.runtime.ktx)
     testImplementation(libs.junit)

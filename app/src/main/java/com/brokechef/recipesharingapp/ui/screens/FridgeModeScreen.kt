@@ -1,8 +1,5 @@
 package com.brokechef.recipesharingapp.ui.screens
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,13 +37,6 @@ fun FridgeModeScreen(
     modifier: Modifier = Modifier,
     viewModel: FridgeModeViewModel = viewModel(),
 ) {
-    val imagePickerLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent(),
-        ) { uri: Uri? ->
-            viewModel.onImageSelected(uri)
-        }
-
     LazyColumn(
         modifier =
             modifier
@@ -57,7 +47,7 @@ fun FridgeModeScreen(
         item {
             ImagePickerSection(
                 selectedImageUri = viewModel.selectedImageUri,
-                onPickImage = { imagePickerLauncher.launch("image/*") },
+                onImageSelected = viewModel::onImageSelected,
             )
         }
 
