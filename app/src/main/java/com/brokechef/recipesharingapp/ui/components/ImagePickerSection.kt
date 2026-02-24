@@ -90,11 +90,12 @@ fun ImagePickerSection(
                             Manifest.permission.CAMERA,
                         )
 
-                if (permanentlyDenied) {
-                    showSettingsDialog = true
-                } else {
-                    showSettingsDialog = true
-                }
+                showSettingsDialog =
+                    if (permanentlyDenied) {
+                        true
+                    } else {
+                        true
+                    }
             }
         }
 
@@ -268,7 +269,7 @@ private fun createTempImageUri(context: Context): Uri {
     val imageFile = File.createTempFile("fridge_", ".jpg", context.cacheDir)
     return FileProvider.getUriForFile(
         context,
-        "${context.packageName}.fileprovider",
+        "${context.packageName}.file_provider",
         imageFile,
     )
 }
