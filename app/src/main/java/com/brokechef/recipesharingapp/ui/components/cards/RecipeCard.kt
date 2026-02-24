@@ -1,4 +1,4 @@
-package com.brokechef.recipesharingapp.ui.components
+package com.brokechef.recipesharingapp.ui.components.cards
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

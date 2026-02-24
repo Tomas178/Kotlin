@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.ui.components.RecipeCard
 import com.brokechef.recipesharingapp.ui.components.buttons.LoadMoreButton
+import com.brokechef.recipesharingapp.ui.components.cards.RecipeCard
 
 @Composable
 fun RecipesListColumn(

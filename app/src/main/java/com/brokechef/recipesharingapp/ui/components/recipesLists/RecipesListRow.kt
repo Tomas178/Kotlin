@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.ui.components.RecipeCard
+import com.brokechef.recipesharingapp.ui.components.cards.RecipeCard
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 import kotlinx.coroutines.launch
 
