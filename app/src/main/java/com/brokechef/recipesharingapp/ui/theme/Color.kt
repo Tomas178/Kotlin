@@ -2,14 +2,6 @@ package com.brokechef.recipesharingapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
 val PrimaryGreen = Color(0xFF10B981)
 val SecondaryGreen = Color(0xFF3AEF73)
 val TertiaryGreen = Color(0xFF7BED9F)
@@ -32,10 +24,7 @@ val BackgroundFormDark = Color(0xFF565151)
 val BackgroundMainLight = Color(0xFFF7F8F9)
 val BackgroundMainDark = Color(0xFF0E0E10)
 
-val BackgroundNavbarDark = Color(0xFF18181B)
 val BackgroundRecipeCardDark = Color(0xFF1E2939)
-
-val InputBackground = Color(0xFFFFFFFF)
 
 val SubmitText = Color(0xFF556987)
 val SubmitTextDark = Color(0xFF463B45)
