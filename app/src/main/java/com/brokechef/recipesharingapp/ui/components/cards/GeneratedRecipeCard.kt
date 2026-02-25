@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.brokechef.recipesharingapp.data.models.GeneratedRecipe
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 
 @Composable
 fun GeneratedRecipeCard(
@@ -74,7 +74,7 @@ fun GeneratedRecipeCard(
                 modifier = imageModifier,
                 contentAlignment = Alignment.Center,
             ) {
-                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                MyCustomCircularProgressIndicator(modifier = Modifier.size(24.dp))
             }
         }
 

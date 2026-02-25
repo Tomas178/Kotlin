@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -29,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.components.cards.RecipeCard
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 import kotlinx.coroutines.launch
@@ -107,7 +107,7 @@ fun RecipesListRow(
                             .height(120.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    CircularProgressIndicator(color = PrimaryGreen)
+                    MyCustomCircularProgressIndicator(color = PrimaryGreen)
                 }
             }
 

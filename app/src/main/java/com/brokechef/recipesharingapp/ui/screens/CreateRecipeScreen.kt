@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -42,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.brokechef.recipesharingapp.ui.components.DynamicInputList
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.components.buttons.GradientButton
 import com.brokechef.recipesharingapp.ui.components.imagepicker.CameraPermissionDialog
 import com.brokechef.recipesharingapp.ui.components.imagepicker.rememberImagePickerState
@@ -75,6 +75,13 @@ fun CreateRecipeScreen(
     val scrollState = rememberScrollState()
     val isSubmitting = viewModel.uiState is CreateRecipeUiState.Submitting
     val headingColor = if (isDark) Color.White else HeaderLight
+
+    val gradientColors =
+        if (isDark) {
+            listOf(PrimaryGreenDark, SecondaryGreenDark, TertiaryGreenDark)
+        } else {
+            listOf(PrimaryGreen, SecondaryGreen, TertiaryGreen)
+        }
 
     Column(
         modifier =
@@ -112,24 +119,11 @@ fun CreateRecipeScreen(
                             .clip(RoundedCornerShape(50))
                             .background(
                                 Brush.horizontalGradient(
-                                    colors =
-                                        if (isDark) {
-                                            listOf(
-                                                PrimaryGreenDark,
-                                                SecondaryGreenDark,
-                                                TertiaryGreenDark,
-                                            )
-                                        } else {
-                                            listOf(PrimaryGreen, SecondaryGreen, TertiaryGreen)
-                                        },
+                                    colors = gradientColors,
                                 ),
                             ).padding(vertical = 16.dp, horizontal = 24.dp),
                 ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        color = if (isDark) SubmitTextDark else SubmitText,
-                        strokeWidth = 2.dp,
-                    )
+                    MyCustomCircularProgressIndicator()
                     Text(
                         text = "Publishing...",
                         color = if (isDark) SubmitTextDark else SubmitText,

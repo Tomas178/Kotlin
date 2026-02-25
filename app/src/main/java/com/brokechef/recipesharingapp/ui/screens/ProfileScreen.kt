@@ -1,15 +1,23 @@
 package com.brokechef.recipesharingapp.ui.screens
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.brokechef.recipesharingapp.ui.components.imagepicker.CameraPermissionDialog
+import com.brokechef.recipesharingapp.ui.components.imagepicker.rememberImagePickerState
 import com.brokechef.recipesharingapp.ui.components.profile.CollectionButtons
 import com.brokechef.recipesharingapp.ui.components.profile.CreateCollectionDialog
 import com.brokechef.recipesharingapp.ui.components.profile.ProfileHeader
@@ -39,6 +47,27 @@ fun ProfileScreen(
         viewModel.loadProfile(userId)
     }
 
+    val context = LocalContext.current
+
+    var pendingImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val profileImagePickerState =
+        rememberImagePickerState(
+            onImagePicked = { uri ->
+                uri?.let {
+                    pendingImageUri = it
+                    val bytes =
+                        context.contentResolver
+                            .openInputStream(it)
+                            ?.use { stream -> stream.readBytes() }
+                    if (bytes != null) {
+                        viewModel.updateProfileImage(bytes)
+                    }
+                }
+            },
+        )
+    CameraPermissionDialog(state = profileImagePickerState)
+
     when (val state = viewModel.profileUiState) {
         is ProfileUiState.Loading -> {
             LoadingScreen(modifier = modifier)
@@ -58,7 +87,10 @@ fun ProfileScreen(
                     ProfileHeader(
                         user = user,
                         isOwnProfile = viewModel.isOwnProfile,
+                        isUpdatingImage = viewModel.isUpdatingImage,
+                        pendingImageUri = pendingImageUri,
                         onNavigateBack = { navController.popBackStack() },
+                        onImageClick = { profileImagePickerState.openGallery() },
                     )
                 }
 
@@ -73,7 +105,6 @@ fun ProfileScreen(
                         onFollow = viewModel::handleFollow,
                         onUnfollow = viewModel::handleUnfollow,
                         onOpenFollowModal = viewModel::openFollowModal,
-                        onNavigateToEditProfile = { /* navController.navigateToEditProfile(it) */ },
                     )
                 }
 

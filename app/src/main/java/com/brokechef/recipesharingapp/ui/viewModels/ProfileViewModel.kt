@@ -13,6 +13,7 @@ import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreateReque
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
+import com.brokechef.recipesharingapp.data.models.openapi.UsersUpdateImageRequest
 import com.brokechef.recipesharingapp.data.repository.CollectionsRecipesRepository
 import com.brokechef.recipesharingapp.data.repository.CollectionsRepository
 import com.brokechef.recipesharingapp.data.repository.FollowsRepository
@@ -58,6 +59,24 @@ class ProfileViewModel(
 
     var totalFollowing by mutableIntStateOf(0)
         private set
+
+    var isUpdatingImage by mutableStateOf(false)
+
+    fun updateProfileImage(imageBytes: ByteArray) {
+        viewModelScope.launch {
+            try {
+                isUpdatingImage = true
+                val imageUrl = uploadsRepository.uploadProfileImage(imageBytes)
+                usersRepository.updateImage(UsersUpdateImageRequest(imageUrl = imageUrl))
+                ToastState.success("Profile image updated!")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ToastState.error(e.message ?: "Failed to update profile image.")
+            } finally {
+                isUpdatingImage = false
+            }
+        }
+    }
 
     suspend fun loadSavedRecipes(
         userId: String?,

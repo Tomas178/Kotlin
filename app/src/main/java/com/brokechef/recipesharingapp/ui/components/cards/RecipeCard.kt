@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.theme.CardBackground
 import com.brokechef.recipesharingapp.ui.theme.HeaderDark
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder
@@ -85,10 +85,9 @@ fun RecipeCard(
                     onError = { isImageLoading = false },
                 )
                 if (isImageLoading) {
-                    CircularProgressIndicator(
+                    MyCustomCircularProgressIndicator(
                         modifier = Modifier.size(32.dp),
                         color = PrimaryGreen,
-                        strokeWidth = 3.dp,
                     )
                 }
             }

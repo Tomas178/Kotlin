@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.brokechef.recipesharingapp.data.enums.FollowModalType
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 
@@ -76,7 +76,7 @@ fun FollowBottomSheet(
                                 .height(200.dp),
                         contentAlignment = Alignment.Center,
                     ) {
-                        CircularProgressIndicator(color = PrimaryGreen)
+                        MyCustomCircularProgressIndicator(color = PrimaryGreen)
                     }
                 }
 

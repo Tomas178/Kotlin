@@ -6,14 +6,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -77,13 +76,7 @@ fun SearchBar(
                         enabled = !isLoading,
                     ) {
                         if (isLoading) {
-                            CircularProgressIndicator(
-                                modifier =
-                                    Modifier
-                                        .width(24.dp)
-                                        .height(24.dp),
-                                strokeWidth = 2.dp,
-                            )
+                            MyCustomCircularProgressIndicator(modifier = Modifier.size(24.dp))
                         } else {
                             Icon(
                                 Icons.Default.Search,

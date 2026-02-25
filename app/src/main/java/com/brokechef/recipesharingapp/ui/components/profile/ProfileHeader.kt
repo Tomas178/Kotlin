@@ -1,6 +1,8 @@
 package com.brokechef.recipesharingapp.ui.components.profile
 
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 import com.brokechef.recipesharingapp.ui.theme.SecondaryGreen
@@ -34,7 +37,10 @@ import com.brokechef.recipesharingapp.ui.theme.TertiaryGreen
 fun ProfileHeader(
     user: UsersFindById200Response,
     isOwnProfile: Boolean,
+    isUpdatingImage: Boolean = false,
+    pendingImageUri: Uri? = null,
     onNavigateBack: () -> Unit,
+    onImageClick: () -> Unit = {},
 ) {
     Box(
         modifier =
@@ -78,10 +84,29 @@ fun ProfileHeader(
                     .align(Alignment.BottomStart)
                     .size(100.dp)
                     .clip(CircleShape)
-                    .background(ImagePlaceholder),
+                    .background(ImagePlaceholder)
+                    .then(
+                        if (isOwnProfile) {
+                            Modifier.clickable { onImageClick() }
+                        } else {
+                            Modifier
+                        },
+                    ),
             contentAlignment = Alignment.Center,
         ) {
-            if (!user.image.isNullOrEmpty()) {
+            if (isUpdatingImage) {
+                MyCustomCircularProgressIndicator()
+            } else if (pendingImageUri != null) {
+                AsyncImage(
+                    model = pendingImageUri,
+                    contentDescription = "Profile picture",
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .clip(CircleShape),
+                    contentScale = ContentScale.Crop,
+                )
+            } else if (!user.image.isNullOrEmpty()) {
                 AsyncImage(
                     model = user.image,
                     contentDescription = "Profile picture",

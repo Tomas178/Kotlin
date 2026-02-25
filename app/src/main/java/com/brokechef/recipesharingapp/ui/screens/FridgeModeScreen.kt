@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.components.cards.GeneratedRecipeCard
 import com.brokechef.recipesharingapp.ui.components.imagepicker.ImagePickerSection
 import com.brokechef.recipesharingapp.ui.navigation.navigateToRecipe
@@ -60,11 +60,7 @@ fun FridgeModeScreen(
                 shape = RoundedCornerShape(24.dp),
             ) {
                 if (isGenerating) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        strokeWidth = 2.dp,
-                    )
+                    MyCustomCircularProgressIndicator()
                     Spacer(modifier = Modifier.size(8.dp))
                     Text("Generating...")
                 } else {
@@ -92,7 +88,7 @@ fun FridgeModeScreen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
+                        MyCustomCircularProgressIndicator()
                         Spacer(modifier = Modifier.height(8.dp))
                         Text("Creating recipe...")
                     }

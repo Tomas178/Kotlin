@@ -33,7 +33,6 @@ fun ProfileInfoSection(
     onFollow: () -> Unit,
     onUnfollow: () -> Unit,
     onOpenFollowModal: (FollowModalType) -> Unit,
-    onNavigateToEditProfile: (String) -> Unit,
 ) {
     Column(
         modifier =
