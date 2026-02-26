@@ -15,7 +15,6 @@
 
 package com.brokechef.recipesharingapp.api
 
-import com.brokechef.recipesharingapp.data.models.openapi.RatingsRate200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RatingsRateRequest
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate400Response
 
@@ -74,10 +73,10 @@ import io.ktor.http.ParametersBuilder
         * Rate recipe
         * 
          * @param ratingsRateRequest  
-         * @return RatingsRate200Response
+         * @return kotlin.Double
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun ratingsRate(ratingsRateRequest: RatingsRateRequest): HttpResponse<RatingsRate200Response> {
+        open suspend fun ratingsRate(ratingsRateRequest: RatingsRateRequest): HttpResponse<kotlin.Double> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -107,10 +106,10 @@ import io.ktor.http.ParametersBuilder
         * Remove rating for recipe
         * 
          * @param id  
-         * @return kotlin.Int
+         * @return kotlin.Double
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun ratingsRemove(id: kotlin.Int): HttpResponse<kotlin.Int> {
+        open suspend fun ratingsRemove(id: kotlin.Int): HttpResponse<kotlin.Double> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 
@@ -141,10 +140,10 @@ import io.ktor.http.ParametersBuilder
         * Update rating for recipe
         * 
          * @param ratingsRateRequest  
-         * @return kotlin.Int
+         * @return kotlin.Double
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun ratingsUpdate(ratingsRateRequest: RatingsRateRequest): HttpResponse<kotlin.Int> {
+        open suspend fun ratingsUpdate(ratingsRateRequest: RatingsRateRequest): HttpResponse<kotlin.Double> {
 
             val localVariableAuthNames = listOf<String>("Authorization")
 

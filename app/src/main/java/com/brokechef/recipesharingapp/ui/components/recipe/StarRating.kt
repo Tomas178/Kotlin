@@ -19,11 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.brokechef.recipesharingapp.ui.components.utils.formatRating
 import com.brokechef.recipesharingapp.ui.theme.RatingColor
 
 @Composable
 fun StarRating(
-    rating: Int?,
+    rating: Double,
     userRating: Int?,
     isAuthor: Boolean,
     onStarClick: (Int) -> Unit,
@@ -48,7 +49,7 @@ fun StarRating(
                 }
             }
 
-            if (rating != null) {
+            if (rating > 0) {
                 Text(
                     text = "${formatRating(rating)}/5",
                     style = MaterialTheme.typography.bodyLarge,
@@ -98,5 +99,3 @@ fun StarRating(
         }
     }
 }
-
-private fun formatRating(rating: Int): String = "$rating"

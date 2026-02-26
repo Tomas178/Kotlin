@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.components.cards.RecipeCard
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
@@ -47,10 +47,10 @@ fun RecipesListRow(
     pageSize: Int = 2,
     onRecipeClick: (Int) -> Unit,
     onEmptyAction: () -> Unit,
-    loadPage: suspend (userId: String?, offset: Int, limit: Int) -> List<RecipesFindAll200ResponseInner>,
+    loadPage: suspend (userId: String?, offset: Int, limit: Int) -> List<RecipesSearch200ResponseInner>,
     loadTotal: suspend (userId: String?) -> Int,
 ) {
-    var recipes by remember { mutableStateOf<List<RecipesFindAll200ResponseInner>>(emptyList()) }
+    var recipes by remember { mutableStateOf<List<RecipesSearch200ResponseInner>>(emptyList()) }
     var totalRecipes by remember { mutableIntStateOf(0) }
     var offset by remember { mutableIntStateOf(0) }
     var isLoading by remember { mutableStateOf(true) }

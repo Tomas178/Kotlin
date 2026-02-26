@@ -180,7 +180,7 @@ class RecipeViewModel(
                         RatingsRateRequest(rating = rating, recipeId = currentRecipeId),
                     )
                 userRating = rating
-                updateRecipeRating(result.rating)
+                updateRecipeRating(result)
                 ToastState.success("Rating submitted!")
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -222,7 +222,7 @@ class RecipeViewModel(
         }
     }
 
-    private fun updateRecipeRating(newRating: Int?) {
+    private fun updateRecipeRating(newRating: Double) {
         val currentState = recipeUiState
         if (currentState is RecipeUiState.Success) {
             recipeUiState =

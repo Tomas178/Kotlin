@@ -34,7 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 import com.brokechef.recipesharingapp.ui.components.icons.DeleteIcon
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder
@@ -46,7 +46,7 @@ fun CollectionsBottomSheet(
     selectedCollection: CollectionsFindByUserId200ResponseInner?,
     collections: List<CollectionsFindByUserId200ResponseInner>,
     isLoadingCollections: Boolean,
-    collectionRecipes: List<RecipesFindAll200ResponseInner>,
+    collectionRecipes: List<RecipesSearch200ResponseInner>,
     isLoadingCollectionRecipes: Boolean,
     onDismiss: () -> Unit,
     onOpenCollectionRecipes: (CollectionsFindByUserId200ResponseInner) -> Unit,
@@ -148,7 +148,7 @@ private fun CollectionsList(
 
 @Composable
 private fun CollectionRecipesList(
-    recipes: List<RecipesFindAll200ResponseInner>,
+    recipes: List<RecipesSearch200ResponseInner>,
     isLoading: Boolean,
     onBackToCollections: () -> Unit,
     onRemoveRecipe: (Int) -> Unit,
@@ -266,7 +266,7 @@ private fun CollectionListItem(
 
 @Composable
 private fun CollectionRecipeListItem(
-    recipe: RecipesFindAll200ResponseInner,
+    recipe: RecipesSearch200ResponseInner,
     onClick: () -> Unit,
     onRemove: () -> Unit,
 ) {

@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
+import com.brokechef.recipesharingapp.ui.components.utils.formatRating
 import com.brokechef.recipesharingapp.ui.theme.CardBackground
 import com.brokechef.recipesharingapp.ui.theme.HeaderDark
 import com.brokechef.recipesharingapp.ui.theme.ImagePlaceholder
@@ -45,7 +46,7 @@ import java.util.Locale
 
 @Composable
 fun RecipeCard(
-    recipe: RecipesFindAll200ResponseInner,
+    recipe: RecipesSearch200ResponseInner,
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
@@ -125,9 +126,9 @@ fun RecipeCard(
                         )
                     }
 
-                    if (recipe.rating != null) {
+                    if (recipe.rating > 0) {
                         Text(
-                            text = "★ ${recipe.rating}/5",
+                            text = "★ ${formatRating(recipe.rating)}/5",
                             color = RatingColor,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp,

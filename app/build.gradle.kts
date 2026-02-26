@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("org.openapi.generator") version "7.19.0"
+    alias(libs.plugins.openapi.generator)
 }
 
 openApiGenerate {
@@ -13,6 +13,17 @@ openApiGenerate {
     outputDir.set(layout.buildDirectory.dir("generate-resources/openapi").map { it.asFile.absolutePath })
     apiPackage.set("com.brokechef.recipesharingapp.api")
     modelPackage.set("com.brokechef.recipesharingapp.data.models.openapi")
+    typeMappings.set(
+        mapOf(
+            "number" to "kotlin.Double",
+            "decimal" to "kotlin.Double",
+        ),
+    )
+    importMappings.set(
+        mapOf(
+            "BigDecimal" to "kotlin.Double",
+        ),
+    )
     configOptions.set(
         mapOf(
             "library" to "jvm-ktor",

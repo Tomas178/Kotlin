@@ -38,7 +38,7 @@ data class FollowsFollow200Response (
     val followedId: kotlin.String,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-23T20:35:14.675Z"
+    val createdAt: kotlin.String = "2026-02-25T22:52:34.511Z"
 
 ) {
 

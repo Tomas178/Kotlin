@@ -4,7 +4,7 @@ import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.api.UsersApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersUpdateImageRequest
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
@@ -16,8 +16,8 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 data class UserRecipes(
-    val created: List<RecipesFindAll200ResponseInner>,
-    val saved: List<RecipesFindAll200ResponseInner>,
+    val created: List<RecipesSearch200ResponseInner>,
+    val saved: List<RecipesSearch200ResponseInner>,
 )
 
 class UsersRepository(

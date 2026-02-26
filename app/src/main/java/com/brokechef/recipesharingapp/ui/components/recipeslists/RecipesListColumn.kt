@@ -7,13 +7,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.ui.components.buttons.LoadMoreButton
 import com.brokechef.recipesharingapp.ui.components.cards.RecipeCard
 
 @Composable
 fun RecipesListColumn(
-    recipes: List<RecipesFindAll200ResponseInner>,
+    recipes: List<RecipesSearch200ResponseInner>,
     hasMore: Boolean,
     isLoadingMore: Boolean,
     onLoadMore: () -> Unit,

@@ -3,7 +3,6 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.api.RatingsApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
-import com.brokechef.recipesharingapp.data.models.openapi.RatingsRate200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RatingsRateRequest
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -35,7 +34,7 @@ class RatingsRepository(
             }
         })
 
-    suspend fun rate(input: RatingsRateRequest): RatingsRate200Response {
+    suspend fun rate(input: RatingsRateRequest): Double {
         val result = api.ratingsRate(input)
         if (result.response.status.isSuccess()) {
             return result.body()
@@ -50,7 +49,7 @@ class RatingsRepository(
         }
     }
 
-    suspend fun update(input: RatingsRateRequest): Int {
+    suspend fun update(input: RatingsRateRequest): Double {
         val result = api.ratingsUpdate(input)
         if (result.response.status.isSuccess()) {
             return result.body()

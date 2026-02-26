@@ -6,8 +6,8 @@ import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreate200Response
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesCreateRequest
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindById200Response
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -42,7 +42,7 @@ class RecipesRepository(
         offset: Int = 0,
         limit: Int = 12,
         sort: String = "newest",
-    ): List<RecipesFindAll200ResponseInner> {
+    ): List<RecipesSearch200ResponseInner> {
         val result = api.recipesFindAll(offset = offset, limit = limit, sort = sort)
         if (result.response.status.isSuccess()) {
             return result.body().map { it.toRecipeFindAll() }
@@ -53,7 +53,7 @@ class RecipesRepository(
     suspend fun getAllRecommended(
         offset: Int,
         limit: Int,
-    ): List<RecipesFindAll200ResponseInner> {
+    ): List<RecipesSearch200ResponseInner> {
         val result = api.recipesFindAllRecommended(offset = offset, limit = limit)
         if (result.response.status.isSuccess()) {
             return result.body().map { it.toRecipeFindAll() }
@@ -73,7 +73,7 @@ class RecipesRepository(
         userInput: String,
         limit: Int,
         offset: Int,
-    ): List<RecipesFindAll200ResponseInner> {
+    ): List<RecipesSearch200ResponseInner> {
         val result = api.recipesSearch(userInput = userInput, offset = offset, limit = limit)
         if (result.response.status.isSuccess()) {
             return result.body().map { it.toRecipeFindAll() }

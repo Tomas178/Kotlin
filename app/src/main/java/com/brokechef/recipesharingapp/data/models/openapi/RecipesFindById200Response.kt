@@ -32,9 +32,9 @@ import kotlinx.serialization.Contextual
  * @param createdAt 
  * @param author 
  * @param imageUrl 
+ * @param rating 
  * @param ingredients 
  * @param tools 
- * @param rating 
  */
 @Serializable
 
@@ -56,7 +56,7 @@ data class RecipesFindById200Response (
     val steps: kotlin.collections.List<kotlin.String>,
 
     @SerialName(value = "createdAt")
-    val createdAt: kotlin.String = "2026-02-23T20:35:14.675Z",
+    val createdAt: kotlin.String = "2026-02-25T22:52:34.511Z",
 
     @SerialName(value = "author")
     val author: RecipesSearch200ResponseInnerAuthor,
@@ -64,14 +64,14 @@ data class RecipesFindById200Response (
     @SerialName(value = "imageUrl")
     val imageUrl: kotlin.String?,
 
+    @SerialName(value = "rating")
+    val rating: kotlin.Double,
+
     @SerialName(value = "ingredients")
     val ingredients: kotlin.collections.List<kotlin.String>,
 
     @SerialName(value = "tools")
-    val tools: kotlin.collections.List<kotlin.String>,
-
-    @SerialName(value = "rating")
-    val rating: kotlin.Int? = null
+    val tools: kotlin.collections.List<kotlin.String>
 
 ) {
 

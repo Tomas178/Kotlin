@@ -15,7 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.brokechef.recipesharingapp.ui.components.statescreens.LoadingScreen
+import com.brokechef.recipesharingapp.ui.components.MyCustomCircularProgressIndicator
 
 @Composable
 fun RecipeImage(
@@ -34,7 +34,7 @@ fun RecipeImage(
         contentAlignment = Alignment.Center,
     ) {
         if (isLoading) {
-            LoadingScreen()
+            MyCustomCircularProgressIndicator()
         }
 
         AsyncImage(

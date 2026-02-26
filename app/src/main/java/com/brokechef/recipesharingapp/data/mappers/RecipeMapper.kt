@@ -1,18 +1,17 @@
 package com.brokechef.recipesharingapp.data.mappers
 
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInnerAuthor
 import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInnerAuthor
 
-fun RecipesSearch200ResponseInner.toRecipeFindAll(): RecipesFindAll200ResponseInner =
-    RecipesFindAll200ResponseInner(
+fun RecipesSearch200ResponseInner.toRecipeFindAll(): RecipesSearch200ResponseInner =
+    RecipesSearch200ResponseInner(
         id = id,
         userId = userId,
         title = title,
         duration = duration,
         createdAt = createdAt,
         author =
-            RecipesFindAll200ResponseInnerAuthor(
+            RecipesSearch200ResponseInnerAuthor(
                 name = author.name,
                 image = author.image,
             ),

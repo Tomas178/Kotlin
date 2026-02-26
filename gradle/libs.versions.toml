@@ -16,8 +16,9 @@ navigationCompose = "2.9.7"
 volley = "1.2.1"
 coil = "2.7.0"
 material3 = "1.4.0"
-ui = "1.10.3"
+ui = "1.10.4"
 navigationRuntimeKtx = "2.9.7"
+openapi-generator = "7.20.0"
 
 
 [libraries]
@@ -57,5 +58,6 @@ androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navig
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+openapi-generator = { id = "org.openapi.generator", version.ref = "openapi-generator" }
 
 

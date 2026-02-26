@@ -7,7 +7,7 @@ import com.brokechef.recipesharingapp.data.mappers.toRecipeFindAll
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreate200Response
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreateRequest
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -69,7 +69,7 @@ class CollectionsRepository(
         result.response.throwApiError("Failed to load collections.")
     }
 
-    suspend fun findRecipesByCollectionId(id: Int): List<RecipesFindAll200ResponseInner> {
+    suspend fun findRecipesByCollectionId(id: Int): List<RecipesSearch200ResponseInner> {
         val result = api.collectionsFindRecipesByCollectionId(id)
         if (result.response.status.isSuccess()) {
             return result.body().map { it.toRecipeFindAll() }

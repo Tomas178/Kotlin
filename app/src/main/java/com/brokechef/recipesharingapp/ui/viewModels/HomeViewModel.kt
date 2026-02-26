@@ -9,14 +9,14 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.enums.SortingTypes
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.data.repository.RecipesRepository
 import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import kotlinx.coroutines.launch
 
 sealed interface HomeUiState {
     data class Success(
-        val recipes: List<RecipesFindAll200ResponseInner>,
+        val recipes: List<RecipesSearch200ResponseInner>,
     ) : HomeUiState
 
     data object Error : HomeUiState
@@ -43,7 +43,7 @@ class HomeViewModel(
     var totalCount: Int by mutableIntStateOf(0)
         private set
 
-    private val allRecipes: MutableList<RecipesFindAll200ResponseInner> = mutableListOf()
+    private val allRecipes: MutableList<RecipesSearch200ResponseInner> = mutableListOf()
 
     var searchQuery by mutableStateOf("")
         private set

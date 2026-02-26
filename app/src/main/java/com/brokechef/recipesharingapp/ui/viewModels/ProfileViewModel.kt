@@ -11,7 +11,7 @@ import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.enums.FollowModalType
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsCreateRequest
 import com.brokechef.recipesharingapp.data.models.openapi.CollectionsFindByUserId200ResponseInner
-import com.brokechef.recipesharingapp.data.models.openapi.RecipesFindAll200ResponseInner
+import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200ResponseInner
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersUpdateImageRequest
 import com.brokechef.recipesharingapp.data.repository.CollectionsRecipesRepository
@@ -82,7 +82,7 @@ class ProfileViewModel(
         userId: String?,
         offset: Int,
         limit: Int,
-    ): List<RecipesFindAll200ResponseInner> =
+    ): List<RecipesSearch200ResponseInner> =
         try {
             val result = usersRepository.getRecipes(offset = offset, limit = limit, id = userId)
             result.saved
@@ -95,7 +95,7 @@ class ProfileViewModel(
         userId: String?,
         offset: Int,
         limit: Int,
-    ): List<RecipesFindAll200ResponseInner> =
+    ): List<RecipesSearch200ResponseInner> =
         try {
             val result = usersRepository.getRecipes(offset = offset, limit = limit, id = userId)
             result.created
@@ -145,7 +145,7 @@ class ProfileViewModel(
     var selectedCollection by mutableStateOf<CollectionsFindByUserId200ResponseInner?>(null)
         private set
 
-    var collectionRecipes by mutableStateOf<List<RecipesFindAll200ResponseInner>>(emptyList())
+    var collectionRecipes by mutableStateOf<List<RecipesSearch200ResponseInner>>(emptyList())
         private set
 
     var isLoadingCollectionRecipes by mutableStateOf(false)
