@@ -59,7 +59,7 @@ private fun AuthScreens(authViewModel: AuthViewModel) {
                 onNavigateToForgotPassword = {
                     navController.navigate(Screen.RequestResetPassword.route)
                 },
-                getSocialLoginUrl = { authViewModel.getSocialLoginUrl(it) },
+                authService = authViewModel.authService,
                 errorMessage = authViewModel.errorMessage,
             )
         }
@@ -71,7 +71,7 @@ private fun AuthScreens(authViewModel: AuthViewModel) {
                 onNavigateToSignIn = {
                     navController.popBackStack()
                 },
-                getSocialLoginUrl = { authViewModel.getSocialLoginUrl(it) },
+                authService = authViewModel.authService,
                 errorMessage = authViewModel.errorMessage,
                 signUpSuccess = authViewModel.signUpSuccess,
             )

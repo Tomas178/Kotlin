@@ -20,7 +20,25 @@
         android:theme="@style/Theme.RecipeSharingApp">
 
         <activity
+            android:name=".OAuthCallbackActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="brokechef"
+                    android:host="auth"
+                    android:pathPrefix="/callback" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MainActivity"
+            android:launchMode="singleTop"
             android:exported="true"
             android:theme="@style/Theme.RecipeSharingApp">
             <intent-filter>

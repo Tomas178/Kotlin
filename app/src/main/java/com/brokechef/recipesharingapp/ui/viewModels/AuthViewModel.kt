@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.brokechef.recipesharingapp.data.auth.AuthResponse
 import com.brokechef.recipesharingapp.data.auth.AuthService
+import com.brokechef.recipesharingapp.data.auth.OAuthResult
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.ui.components.toast.ToastState
 import io.ktor.client.HttpClient
@@ -38,7 +39,8 @@ class AuthViewModel(
             }
         }
 
-    private val authService = AuthService(client)
+    // Made public so screens can pass it to OAuthHandler.launchOAuth()
+    val authService = AuthService(client)
 
     var authState by mutableStateOf<AuthState>(AuthState.Loading)
         private set
@@ -143,5 +145,35 @@ class AuthViewModel(
         errorMessage = null
     }
 
-    fun getSocialLoginUrl(provider: String): String = authService.getSocialLoginUrl(provider)
+    fun handleOAuthResult(result: OAuthResult) {
+        viewModelScope.launch {
+            errorMessage = null
+            when (result) {
+                is OAuthResult.Success -> {
+                    ToastState.loading("Signing in...")
+                    authService
+                        .getSession(result.token)
+                        .onSuccess { authResponse ->
+                            tokenManager.saveToken(result.token)
+                            tokenManager.saveUserId(authResponse.user.id)
+                            authState = AuthState.Authenticated(authResponse)
+                            ToastState.success("Signed in!")
+                        }.onFailure { error ->
+                            errorMessage = error.message ?: "Failed to fetch session"
+                            ToastState.error(errorMessage!!)
+                        }
+                }
+
+                is OAuthResult.NeedsSessionFetch -> {
+                    errorMessage = "OAuth sign-in failed: no session token received"
+                    ToastState.error(errorMessage!!)
+                }
+
+                is OAuthResult.Error -> {
+                    errorMessage = result.message
+                    ToastState.error(result.message)
+                }
+            }
+        }
+    }
 }

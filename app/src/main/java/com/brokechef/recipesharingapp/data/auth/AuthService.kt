@@ -75,6 +75,12 @@ data class SessionData(
     val userAgent: String? = null,
 )
 
+@Serializable
+data class SocialLoginResponse(
+    val url: String,
+    val redirect: Boolean = false,
+)
+
 private val lenientJson = Json { ignoreUnknownKeys = true }
 
 class AuthService(
@@ -127,18 +133,15 @@ class AuthService(
             if (response.status == HttpStatusCode.OK) {
                 try {
                     val authResponse = lenientJson.decodeFromString<AuthResponse>(body)
-
                     val setCookie =
                         response.headers
                             .getAll("Set-Cookie")
                             ?.firstOrNull { it.startsWith("better-auth.session_token=") }
-
                     val signedToken =
                         setCookie
                             ?.substringAfter("better-auth.session_token=")
                             ?.substringBefore(";")
                             ?.let { java.net.URLDecoder.decode(it, "UTF-8") }
-
                     Result.success(authResponse.copy(token = signedToken ?: authResponse.token))
                 } catch (e: Exception) {
                     Result.failure(Exception(parseError(body, "Sign in failed")))
@@ -170,12 +173,7 @@ class AuthService(
             if (response.status == HttpStatusCode.OK) {
                 try {
                     val session = lenientJson.decodeFromString<SessionResponse>(body)
-                    Result.success(
-                        AuthResponse(
-                            token = session.session.token,
-                            user = session.user,
-                        ),
-                    )
+                    Result.success(AuthResponse(token = session.session.token, user = session.user))
                 } catch (e: Exception) {
                     Result.failure(Exception("Session invalid"))
                 }
@@ -206,5 +204,25 @@ class AuthService(
             Result.failure(e)
         }
 
-    fun getSocialLoginUrl(provider: String): String = "$baseUrl/sign-in/social?provider=$provider"
+    suspend fun getSocialLoginUrl(provider: String): Result<String> =
+        try {
+            val deepLink = "${Config.Urls.OAUTH_REDIRECT_SCHEME}://auth/callback"
+            val mobileCallback = "${Config.Urls.BASE_URL}/auth/mobile-callback?redirect=$deepLink"
+
+            val response =
+                client.post("$baseUrl/sign-in/social") {
+                    contentType(ContentType.Application.Json)
+                    setBody(
+                        mapOf(
+                            "provider" to provider,
+                            "callbackURL" to mobileCallback,
+                        ),
+                    )
+                }
+            val body = response.bodyAsText()
+            val json = lenientJson.decodeFromString<SocialLoginResponse>(body)
+            Result.success(json.url)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
 }

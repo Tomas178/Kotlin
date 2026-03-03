@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,25 +32,29 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.brokechef.recipesharingapp.R
+import com.brokechef.recipesharingapp.data.auth.AuthService
+import com.brokechef.recipesharingapp.data.auth.OAuthHandler
 import com.brokechef.recipesharingapp.ui.components.buttons.GradientButton
 import com.brokechef.recipesharingapp.ui.components.buttons.SocialLoginButton
-import com.brokechef.recipesharingapp.ui.components.buttons.openSocialLogin
 import com.brokechef.recipesharingapp.ui.components.inputs.FormTextField
 import com.brokechef.recipesharingapp.ui.theme.BackgroundFormDark
 import com.brokechef.recipesharingapp.ui.theme.BackgroundFormLight
 import com.brokechef.recipesharingapp.ui.theme.ErrorRed
 import com.brokechef.recipesharingapp.ui.theme.PrimaryGreen
 import com.brokechef.recipesharingapp.utils.validateSignUp
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignUpScreen(
     onSignUp: (name: String, email: String, password: String) -> Unit,
     onNavigateToSignIn: () -> Unit,
-    getSocialLoginUrl: (provider: String) -> String,
+    authService: AuthService,
     errorMessage: String?,
     signUpSuccess: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val scope = rememberCoroutineScope()
+
     val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -159,13 +164,29 @@ fun SignUpScreen(
                 SocialLoginButton(
                     iconRes = R.drawable.ic_google,
                     label = "Google",
-                    onClick = { openSocialLogin(context, getSocialLoginUrl("google")) },
+                    onClick = {
+                        scope.launch {
+                            OAuthHandler.launchOAuth(
+                                context,
+                                "google",
+                                authService,
+                            )
+                        }
+                    },
                     modifier = Modifier.weight(1f),
                 )
                 SocialLoginButton(
                     iconRes = R.drawable.ic_github,
                     label = "GitHub",
-                    onClick = { openSocialLogin(context, getSocialLoginUrl("github")) },
+                    onClick = {
+                        scope.launch {
+                            OAuthHandler.launchOAuth(
+                                context,
+                                "github",
+                                authService,
+                            )
+                        }
+                    },
                     modifier = Modifier.weight(1f),
                 )
             }
