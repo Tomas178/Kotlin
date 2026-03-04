@@ -136,10 +136,11 @@ class AuthService(
                     val setCookie =
                         response.headers
                             .getAll("Set-Cookie")
-                            ?.firstOrNull { it.startsWith("better-auth.session_token=") }
+                            ?.firstOrNull { it.startsWith("${Config.Auth.SESSION_COOKIE_NAME}=") }
+                            ?.substringAfter("${Config.Auth.SESSION_COOKIE_NAME}=")
                     val signedToken =
                         setCookie
-                            ?.substringAfter("better-auth.session_token=")
+                            ?.substringAfter("${Config.Auth.SESSION_COOKIE_NAME}=")
                             ?.substringBefore(";")
                             ?.let { java.net.URLDecoder.decode(it, "UTF-8") }
                     Result.success(authResponse.copy(token = signedToken ?: authResponse.token))
@@ -156,7 +157,7 @@ class AuthService(
     suspend fun signOut(token: String): Result<Unit> =
         try {
             client.post("$baseUrl/sign-out") {
-                header("Cookie", "better-auth.session_token=$token")
+                header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
             }
             Result.success(Unit)
         } catch (e: Exception) {
@@ -167,7 +168,7 @@ class AuthService(
         try {
             val response =
                 client.get("$baseUrl/get-session") {
-                    header("Cookie", "better-auth.session_token=$token")
+                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
                 }
             val body = response.bodyAsText()
             if (response.status == HttpStatusCode.OK) {

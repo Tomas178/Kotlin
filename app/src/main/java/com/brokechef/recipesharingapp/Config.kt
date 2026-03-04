@@ -10,4 +10,9 @@ object Config {
 
         const val OAUTH_REDIRECT_SCHEME = "brokechef"
     }
+
+    object Auth {
+        const val COOKIE_PREFIX = "brokechef"
+        const val SESSION_COOKIE_NAME = "$COOKIE_PREFIX.session_token"
+    }
 }

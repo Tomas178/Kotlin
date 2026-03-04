@@ -70,7 +70,7 @@ class RecipeGeneratorRepository(
             defaultRequest {
                 val token = tokenManager.getToken()
                 if (token != null) {
-                    header("Cookie", "better-auth.session_token=$token")
+                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
                 }
             }
         }
@@ -126,7 +126,10 @@ class RecipeGeneratorRepository(
                             setRequestProperty("Cache-Control", "no-cache")
                             val token = tokenManager.getToken()
                             if (token != null) {
-                                setRequestProperty("Cookie", "better-auth.session_token=$token")
+                                setRequestProperty(
+                                    "Cookie",
+                                    "${Config.Auth.SESSION_COOKIE_NAME}=$token",
+                                )
                             }
                             connectTimeout = 15_000
                             readTimeout = 120_000

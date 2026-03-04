@@ -29,7 +29,7 @@ class SavedRecipesRepository(
             it.defaultRequest {
                 val token = tokenManager.getToken()
                 if (token != null) {
-                    header("Cookie", "better-auth.session_token=$token")
+                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
                 }
             }
         })
