@@ -6,34 +6,15 @@ import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.FollowsFollow200Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
+import com.brokechef.recipesharingapp.di.authenticatedClientConfig
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
 class FollowsRepository(
     private val tokenManager: TokenManager,
     private val baseUrl: String = Config.Urls.BASE_CRUD_URL,
 ) {
     private val api =
-        FollowsApi(baseUrl = baseUrl, httpClientConfig = {
-            it.install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    },
-                )
-            }
-            it.defaultRequest {
-                val token = tokenManager.getToken()
-                if (token != null) {
-                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
-                }
-            }
-        })
+        FollowsApi(baseUrl = baseUrl, httpClientConfig = authenticatedClientConfig(tokenManager))
 
     suspend fun follow(id: String): FollowsFollow200Response {
         val result = api.followsFollow(id)

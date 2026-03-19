@@ -5,34 +5,15 @@ import com.brokechef.recipesharingapp.api.RatingsApi
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.openapi.RatingsRateRequest
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
+import com.brokechef.recipesharingapp.di.authenticatedClientConfig
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
 class RatingsRepository(
     private val tokenManager: TokenManager,
     private val baseUrl: String = Config.Urls.BASE_CRUD_URL,
 ) {
     private val api =
-        RatingsApi(baseUrl = baseUrl, httpClientConfig = {
-            it.install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    },
-                )
-            }
-            it.defaultRequest {
-                val token = tokenManager.getToken()
-                if (token != null) {
-                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
-                }
-            }
-        })
+        RatingsApi(baseUrl = baseUrl, httpClientConfig = authenticatedClientConfig(tokenManager))
 
     suspend fun rate(input: RatingsRateRequest): Double {
         val result = api.ratingsRate(input)

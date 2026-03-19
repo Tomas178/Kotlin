@@ -58,9 +58,11 @@ class HomeViewModel(
         private set
 
     private var isInSearchMode by mutableStateOf(false)
+    private val searchResults: MutableList<RecipesSearch200ResponseInner> = mutableListOf()
+    private var searchHasMore by mutableStateOf(false)
 
     val hasMore: Boolean
-        get() = if (isInSearchMode) false else allRecipes.size < totalCount
+        get() = if (isInSearchMode) searchHasMore else allRecipes.size < totalCount
 
     init {
         viewModelScope.launch {
@@ -98,12 +100,35 @@ class HomeViewModel(
         }
     }
 
+    private suspend fun loadSearchResults() {
+        try {
+            val results =
+                recipesRepository.search(
+                    userInput = searchQuery,
+                    limit = RECIPES_PER_PAGE,
+                    offset = searchResults.size,
+                )
+            searchResults.addAll(results)
+            searchHasMore = results.size >= RECIPES_PER_PAGE
+            homeUiState = HomeUiState.Success(searchResults.toList())
+        } catch (e: Exception) {
+            if (searchResults.isEmpty()) {
+                searchError = e.message ?: "Search failed. Please try again."
+            }
+            ToastState.error(e.message ?: "Failed to load more results.")
+        }
+    }
+
     fun loadMore() {
-        if (isLoadingMore || !hasMore || isInSearchMode) return
+        if (isLoadingMore || !hasMore) return
 
         viewModelScope.launch {
             isLoadingMore = true
-            loadRecipes()
+            if (isInSearchMode) {
+                loadSearchResults()
+            } else {
+                loadRecipes()
+            }
             isLoadingMore = false
         }
     }
@@ -134,6 +159,7 @@ class HomeViewModel(
         viewModelScope.launch {
             isSearching = true
             searchError = ""
+            searchResults.clear()
             try {
                 val results =
                     recipesRepository.search(
@@ -141,8 +167,10 @@ class HomeViewModel(
                         limit = RECIPES_PER_PAGE,
                         offset = 0,
                     )
+                searchResults.addAll(results)
+                searchHasMore = results.size >= RECIPES_PER_PAGE
                 isInSearchMode = true
-                homeUiState = HomeUiState.Success(results)
+                homeUiState = HomeUiState.Success(searchResults.toList())
             } catch (e: Exception) {
                 searchError = e.message ?: "Search failed. Please try again."
             } finally {
@@ -155,6 +183,8 @@ class HomeViewModel(
         searchQuery = ""
         searchError = ""
         isInSearchMode = false
+        searchResults.clear()
+        searchHasMore = false
 
         if (allRecipes.isNotEmpty()) {
             homeUiState = HomeUiState.Success(allRecipes.toList())

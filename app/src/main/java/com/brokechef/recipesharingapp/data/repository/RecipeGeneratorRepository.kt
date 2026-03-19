@@ -4,14 +4,11 @@ import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.models.RecipeGenerationStatus
 import com.brokechef.recipesharingapp.data.models.RecipeSSEData
+import com.brokechef.recipesharingapp.di.authenticatedClientConfigWithTimeout
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -19,7 +16,6 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -54,26 +50,7 @@ class RecipeGeneratorRepository(
     private val baseUrl: String = Config.Urls.BASE_RECIPE_GENERATOR_URL,
 ) {
     private val client =
-        HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    },
-                )
-            }
-            install(HttpTimeout) {
-                requestTimeoutMillis = 60_000
-                connectTimeoutMillis = 15_000
-            }
-            defaultRequest {
-                val token = tokenManager.getToken()
-                if (token != null) {
-                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
-                }
-            }
-        }
+        HttpClient(CIO, authenticatedClientConfigWithTimeout(tokenManager))
 
     suspend fun uploadFridgeImage(imageBytes: ByteArray) {
         val response: HttpResponse =

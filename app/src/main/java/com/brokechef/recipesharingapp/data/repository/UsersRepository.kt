@@ -8,12 +8,8 @@ import com.brokechef.recipesharingapp.data.models.openapi.RecipesSearch200Respon
 import com.brokechef.recipesharingapp.data.models.openapi.UsersFindById200Response
 import com.brokechef.recipesharingapp.data.models.openapi.UsersUpdateImageRequest
 import com.brokechef.recipesharingapp.data.repository.utils.throwApiError
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.request.header
+import com.brokechef.recipesharingapp.di.authenticatedClientConfig
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
 data class UserRecipes(
     val created: List<RecipesSearch200ResponseInner>,
@@ -25,22 +21,7 @@ class UsersRepository(
     private val baseUrl: String = Config.Urls.BASE_CRUD_URL,
 ) {
     private val api =
-        UsersApi(baseUrl = baseUrl, httpClientConfig = {
-            it.install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    },
-                )
-            }
-            it.defaultRequest {
-                val token = tokenManager.getToken()
-                if (token != null) {
-                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
-                }
-            }
-        })
+        UsersApi(baseUrl = baseUrl, httpClientConfig = authenticatedClientConfig(tokenManager))
 
     suspend fun findById(id: String?): UsersFindById200Response {
         val result = api.usersFindById(id)

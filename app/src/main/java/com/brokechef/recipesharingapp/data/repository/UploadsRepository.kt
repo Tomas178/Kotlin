@@ -3,20 +3,17 @@ package com.brokechef.recipesharingapp.data.repository
 import com.brokechef.recipesharingapp.Config
 import com.brokechef.recipesharingapp.data.auth.TokenManager
 import com.brokechef.recipesharingapp.data.repository.utils.ApiErrorResponse
+import com.brokechef.recipesharingapp.di.authenticatedClientConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -33,17 +30,7 @@ class UploadsRepository(
     private val baseUrl: String = Config.Urls.BASE_UPLOAD_URL,
 ) {
     private val client =
-        HttpClient(CIO) {
-            install(ContentNegotiation) {
-                json(Json { ignoreUnknownKeys = true })
-            }
-            defaultRequest {
-                val token = tokenManager.getToken()
-                if (token != null) {
-                    header("Cookie", "${Config.Auth.SESSION_COOKIE_NAME}=$token")
-                }
-            }
-        }
+        HttpClient(CIO, authenticatedClientConfig(tokenManager))
 
     suspend fun uploadCollectionImage(imageBytes: ByteArray): String = upload("$baseUrl/collection", imageBytes, "imageUrl")
 
